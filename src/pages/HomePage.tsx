@@ -6,6 +6,19 @@ interface HomePageProps {
   onNavigate: (page: string) => void;
 }
 
+// Opening match: Mexico vs South Africa — June 11, 2026, 1:00 p.m. local (UTC−6).
+const KICKOFF = Date.UTC(2026, 5, 11, 19, 0, 0);
+
+const getCountdown = () => {
+  const diff = Math.max(0, KICKOFF - Date.now());
+  return {
+    days: Math.floor(diff / 86_400_000),
+    hours: Math.floor((diff / 3_600_000) % 24),
+    minutes: Math.floor((diff / 60_000) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
+};
+
 const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
   <div className="flex flex-col items-center bg-white/5 rounded-xl px-5 py-3 min-w-[72px]">
     <span className="text-3xl font-bold text-[#f5a623] tabular-nums">{String(value).padStart(2, '0')}</span>
@@ -14,8 +27,12 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
 );
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  // Placeholder countdown to Jun 14 2026 opening match
-  const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  const [countdown, setCountdown] = React.useState(getCountdown);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => setCountdown(getCountdown()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div>
@@ -152,11 +169,19 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               View all →
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {recentResults.slice(0, 3).map((m) => (
-              <MatchCard key={m.id} match={m} isResult />
-            ))}
-          </div>
+          {recentResults.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {recentResults.slice(0, 3).map((m) => (
+                <MatchCard key={m.id} match={m} isResult />
+              ))}
+            </div>
+          ) : (
+            <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
+              <span className="text-5xl">⚽</span>
+              <h3 className="text-white font-bold text-xl">Kick-off June 11, 2026</h3>
+              <p className="text-white/40 text-sm">Results will appear here once the tournament begins.</p>
+            </div>
+          )}
         </div>
       </section>
 

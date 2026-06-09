@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { upcomingMatches, recentResults, Match } from '../data/mockData';
+import { upcomingMatches, recentResults, groups, Match } from '../data/mockData';
 import MatchCard from '../components/MatchCard';
 
-const stages = ['All', 'Group A', 'Group B', 'Group C', 'Group D'];
+const stages = ['All', ...Object.keys(groups).map((g) => `Group ${g}`)];
 
 const SchedulePage: React.FC = () => {
   const [activeStage, setActiveStage] = useState('All');
@@ -82,10 +82,10 @@ const SchedulePage: React.FC = () => {
         )
       )}
 
-      {/* Placeholder note */}
+      {/* Note */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full 104-match schedule will be populated here.
+          🗓️ <strong className="text-white/80">Group stage opening fixtures.</strong> The tournament kicks off on June 11, 2026 — results will appear here as matches are played.
         </p>
       </div>
     </div>
