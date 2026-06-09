@@ -1,5 +1,6 @@
-import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { Match } from '../data/mockData';
+import { fetchUpcomingMatches, fetchRecentResults } from '../api/sportsDb';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -12,9 +13,50 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
   </div>
 );
 
+const LoadingCard: React.FC = () => (
+  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 animate-pulse">
+    <div className="h-4 bg-white/10 rounded w-1/3 mb-4" />
+    <div className="h-6 bg-white/10 rounded w-full mb-3" />
+    <div className="h-3 bg-white/10 rounded w-2/3" />
+  </div>
+);
+
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  // Placeholder countdown to Jun 14 2026 opening match
-  const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  const [upcoming, setUpcoming] = useState<Match[]>([]);
+  const [results, setResults] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const [up, res] = await Promise.all([
+          fetchUpcomingMatches(),
+          fetchRecentResults(),
+        ]);
+        if (!cancelled) {
+          setUpcoming(up);
+          setResults(res);
+        }
+      } catch (err) {
+        console.error('Failed to fetch live data:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, []);
+
+  const openingMatch = new Date('2026-06-11T19:00:00Z');
+  const now = new Date();
+  const diff = Math.max(0, openingMatch.getTime() - now.getTime());
+  const countdown = {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
 
   return (
     <div>
@@ -107,8 +149,15 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="bg-[#f5a623] py-4">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {tournamentStats.map((stat) => (
-              <div key={stat.label} className="text-center">
+            {[
+              { icon: '\u26BD', value: '104', label: 'Matches' },
+              { icon: '\u{1F3DF}\u{FE0F}', value: '48', label: 'Teams' },
+              { icon: '\u{1F1FA}\u{1F1F8}', value: 'USA', label: 'Host' },
+              { icon: '\u{1F1E8}\u{1F1E6}', value: 'Canada', label: 'Host' },
+              { icon: '\u{1F1F2}\u{1F1FD}', value: 'Mexico', label: 'Host' },
+              { icon: '\u{1F30E}', value: '16', label: 'Cities' },
+            ].map((stat) => (
+              <div key={stat.label + stat.value} className="text-center">
                 <div className="text-2xl mb-0.5">{stat.icon}</div>
                 <div className="text-[#0a0a1a] font-black text-xl">{stat.value}</div>
                 <div className="text-[#0a0a1a]/60 text-xs font-medium">{stat.label}</div>
@@ -126,22 +175,76 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
           </div>
         </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
-        </div>
+        {loading ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[1,2,3].map(i => <LoadingCard key={i} />)}
+          </div>
+        ) : upcoming.length > 0 ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {upcoming.slice(0, 6).map((match) => (
+              <div key={match.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-colors">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-semibold text-[#f5a623] uppercase tracking-wider">{match.stage}</span>
+                  <span className="text-xs text-white/40">{match.date} · {match.time}</span>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="text-2xl">{match.homeFlag}</span>
+                    <span className="text-white font-bold text-sm truncate">{match.homeTeam}</span>
+                  </div>
+                  <span className="text-white/30 text-xs font-bold">VS</span>
+                  <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                    <span className="text-white font-bold text-sm truncate">{match.awayTeam}</span>
+                    <span className="text-2xl">{match.awayFlag}</span>
+                  </div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-white/5 text-xs text-white/30 truncate">📍 {match.venue}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-white/30 py-10">No upcoming matches scheduled yet.</p>
+        )}
       </section>
 
       {/* ─── Recent Results ─── */}
       <section className="border-y border-white/10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
-          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
-            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
-          </div>
+          {loading ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[1,2,3].map(i => <LoadingCard key={i} />)}
+            </div>
+          ) : results.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {results.slice(0, 6).map((match) => (
+                <div key={match.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-colors">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold text-[#f5a623] uppercase tracking-wider">{match.stage}</span>
+                    <span className="text-xs text-white/40">{match.date}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span className="text-2xl">{match.homeFlag}</span>
+                      <span className="text-white font-bold text-sm truncate">{match.homeTeam}</span>
+                    </div>
+                    <div className="bg-white/10 rounded-lg px-3 py-1 flex items-center gap-1.5">
+                      <span className="text-white font-black text-lg">{match.homeScore}</span>
+                      <span className="text-white/30 text-xs">–</span>
+                      <span className="text-white font-black text-lg">{match.awayScore}</span>
+                    </div>
+                    <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                      <span className="text-white font-bold text-sm truncate">{match.awayTeam}</span>
+                      <span className="text-2xl">{match.awayFlag}</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-white/5 text-xs text-white/30 truncate">📍 {match.venue}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-white/30 py-10">No results yet — the tournament hasn't started.</p>
+          )}
         </div>
       </section>
 

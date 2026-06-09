@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { upcomingMatches, recentResults, Match } from '../data/mockData';
-
-const stages = ['All', 'Group A', 'Group B', 'Group C', 'Group D'];
+import React, { useState, useEffect, useMemo } from 'react';
+import { Match } from '../data/mockData';
+import { fetchAllGroupMatches } from '../api/sportsDb';
 
 const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isResult = false }) => (
   <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
@@ -53,6 +52,25 @@ const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isRe
 const SchedulePage: React.FC = () => {
   const [activeStage, setActiveStage] = useState('All');
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
+  const [allMatches, setAllMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAllGroupMatches()
+      .then(data => { if (!cancelled) setAllMatches(data); })
+      .catch(err => console.error('Failed to fetch schedule:', err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const upcomingMatches = useMemo(() => allMatches.filter(m => m.homeScore == null), [allMatches]);
+  const recentResults = useMemo(() => allMatches.filter(m => m.homeScore != null), [allMatches]);
+
+  const stages = useMemo(() => {
+    const groupSet = new Set(allMatches.map(m => m.stage));
+    return ['All', ...Array.from(groupSet).sort()];
+  }, [allMatches]);
 
   const filterMatches = (matches: Match[]) =>
     activeStage === 'All' ? matches : matches.filter((m) => m.stage === activeStage);
@@ -106,7 +124,12 @@ const SchedulePage: React.FC = () => {
       </div>
 
       {/* Match cards */}
-      {activeTab === 'upcoming' ? (
+      {loading ? (
+        <div className="text-center py-20">
+          <div className="inline-block w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
+          <p className="text-white/40 mt-4">Loading schedule...</p>
+        </div>
+      ) : activeTab === 'upcoming' ? (
         upcomingFiltered.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {upcomingFiltered.map((m) => (
@@ -128,10 +151,10 @@ const SchedulePage: React.FC = () => {
         )
       )}
 
-      {/* Placeholder note */}
+      {/* Info note */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full 104-match schedule will be populated here.
+          Live data powered by <strong className="text-white/80">TheSportsDB</strong>. {allMatches.length} group stage matches loaded.
         </p>
       </div>
     </div>
