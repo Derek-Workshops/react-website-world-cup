@@ -38,10 +38,17 @@ const HostCitiesPage: React.FC = () => {
     }).addTo(map);
 
     hostCities.forEach((c) => {
+      const priceRange = `$${c.ticketFrom} – $${c.ticketTo}`;
       const marker = L.marker([c.lat, c.lng], { icon: pinIcon })
         .addTo(map)
+        .bindTooltip(
+          `<div style="font-weight:700">${c.flag} ${c.city}</div>` +
+            `<div style="color:#555">${c.stadium}</div>` +
+            `<div style="color:#b8860b;font-weight:700;margin-top:2px">🎟️ Tickets ${priceRange}</div>`,
+          { direction: 'top', offset: [0, -16], opacity: 1 }
+        )
         .bindPopup(
-          `<strong>${c.stadium}</strong><br/>${c.flag} ${c.city}<br/>Capacity: ${c.capacity.toLocaleString()}`
+          `<strong>${c.stadium}</strong><br/>${c.flag} ${c.city}<br/>Capacity: ${c.capacity.toLocaleString()}<br/>🎟️ Tickets from $${c.ticketFrom}`
         );
       marker.on('click', () => setSelected(c.city));
       markers.current[c.city] = marker;
@@ -88,7 +95,7 @@ const HostCitiesPage: React.FC = () => {
             className="h-[420px] sm:h-[560px] w-full rounded-2xl overflow-hidden border border-white/10 z-0"
           />
           <p className="text-white/30 text-xs mt-2 text-center">
-            Tap a pin or a city to see its stadium. Map data © OpenStreetMap.
+            Hover a pin for ticket prices, or tap a city to fly to its stadium. Map data © OpenStreetMap.
           </p>
         </div>
 
@@ -115,8 +122,13 @@ const HostCitiesPage: React.FC = () => {
                     >
                       <div className="text-white font-semibold text-sm">{c.city}</div>
                       <div className="text-white/50 text-xs mt-0.5">{c.stadium}</div>
-                      <div className="text-white/30 text-xs mt-0.5">
-                        Capacity {c.capacity.toLocaleString()}
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-white/30 text-xs">
+                          Capacity {c.capacity.toLocaleString()}
+                        </span>
+                        <span className="text-[#f5a623] text-xs font-semibold">
+                          🎟️ ${c.ticketFrom}–${c.ticketTo}
+                        </span>
                       </div>
                     </button>
                   ))}
