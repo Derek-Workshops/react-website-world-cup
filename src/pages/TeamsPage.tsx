@@ -1,51 +1,32 @@
-import React, { useState } from 'react';
-import { featuredTeams } from '../data/mockData';
+import React, { useState, useEffect, useMemo } from 'react';
+import { fetchTeams, LiveTeam } from '../api/sportsDb';
 
-const confederations = ['All', 'UEFA', 'CONMEBOL', 'CONCACAF', 'AFC', 'CAF', 'OFC'];
 
-interface TeamCardProps {
-  name: string;
-  flag: string;
-  ranking: number;
-  coach: string;
-  confederation: string;
-}
-
-const TeamCard: React.FC<TeamCardProps> = ({ name, flag, ranking, coach, confederation }) => (
-  <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/50 hover:bg-white/8 rounded-2xl p-6 cursor-pointer transition-all duration-200 group">
-    <div className="flex justify-between items-start mb-4">
-      <span className="text-5xl group-hover:scale-110 transition-transform duration-200">{flag}</span>
-      <div className="text-right">
-        <div className="text-xs text-white/30 uppercase tracking-wider">FIFA Rank</div>
-        <div className="text-2xl font-black text-[#f5a623]">#{ranking}</div>
-      </div>
-    </div>
-    <h3 className="text-white font-bold text-lg mb-1">{name}</h3>
-    <div className="flex items-center justify-between mt-3">
-      <div>
-        <div className="text-xs text-white/30 uppercase tracking-wider">Coach</div>
-        <div className="text-white/70 text-sm">{coach}</div>
-      </div>
-      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-        confederation === 'UEFA' ? 'bg-blue-500/20 text-blue-400' :
-        confederation === 'CONMEBOL' ? 'bg-green-500/20 text-green-400' :
-        confederation === 'CONCACAF' ? 'bg-red-500/20 text-red-400' :
-        'bg-white/10 text-white/50'
-      }`}>
-        {confederation}
-      </span>
-    </div>
-  </div>
-);
 
 const TeamsPage: React.FC = () => {
-  const [activeConf, setActiveConf] = useState('All');
+  const [activeGroup, setActiveGroup] = useState('All');
   const [search, setSearch] = useState('');
+  const [teams, setTeams] = useState<LiveTeam[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = featuredTeams.filter((t) => {
-    const matchConf = activeConf === 'All' || t.confederation === activeConf;
+  useEffect(() => {
+    let cancelled = false;
+    fetchTeams()
+      .then(data => { if (!cancelled) setTeams(data); })
+      .catch(err => console.error('Failed to fetch teams:', err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const groupLabels = useMemo(() => {
+    const groups = new Set(teams.map(t => t.group));
+    return ['All', ...Array.from(groups).sort()];
+  }, [teams]);
+
+  const filtered = teams.filter((t) => {
+    const matchGroup = activeGroup === 'All' || t.group === activeGroup;
     const matchSearch = t.name.toLowerCase().includes(search.toLowerCase());
-    return matchConf && matchSearch;
+    return matchGroup && matchSearch;
   });
 
   return (
@@ -73,49 +54,52 @@ const TeamsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Confederation filter */}
+      {/* Group filter */}
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {confederations.map((c) => (
+        {groupLabels.map((g) => (
           <button
-            key={c}
-            onClick={() => setActiveConf(c)}
+            key={g}
+            onClick={() => setActiveGroup(g)}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-              activeConf === c
+              activeGroup === g
                 ? 'bg-[#f5a623] text-[#0a0a1a]'
                 : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
             }`}
           >
-            {c}
+            {g === 'All' ? 'All' : `Group ${g}`}
           </button>
         ))}
       </div>
 
       {/* Teams grid */}
-      {filtered.length > 0 ? (
+      {loading ? (
+        <div className="text-center py-20">
+          <div className="inline-block w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
+          <p className="text-white/40 mt-4">Loading teams...</p>
+        </div>
+      ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((team) => (
-            <TeamCard key={team.name} {...team} />
+            <div key={team.name} className="bg-white/5 border border-white/10 hover:border-[#f5a623]/50 hover:bg-white/[0.08] rounded-2xl p-6 cursor-pointer transition-all duration-200 group">
+              <div className="flex justify-between items-start mb-4">
+                <span className="text-5xl group-hover:scale-110 transition-transform duration-200">{team.flag}</span>
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#f5a623]/20 text-[#f5a623]">
+                  Group {team.group}
+                </span>
+              </div>
+              <h3 className="text-white font-bold text-lg">{team.name}</h3>
+            </div>
           ))}
         </div>
       ) : (
         <p className="text-center text-white/30 py-16">No teams found.</p>
       )}
 
-      {/* Placeholder note */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          { icon: '🌍', label: 'UEFA', count: '16 teams' },
-          { icon: '🌎', label: 'CONMEBOL', count: '6 teams' },
-          { icon: '🌏', label: 'AFC', count: '8 teams' },
-        ].map((conf) => (
-          <div key={conf.label} className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4">
-            <span className="text-3xl">{conf.icon}</span>
-            <div>
-              <div className="text-white font-bold">{conf.label}</div>
-              <div className="text-white/40 text-sm">{conf.count} qualified</div>
-            </div>
-          </div>
-        ))}
+      {/* Info */}
+      <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
+        <p className="text-white/60 text-sm">
+          {teams.length} nations competing. Live data from <strong className="text-white/80">TheSportsDB</strong>.
+        </p>
       </div>
     </div>
   );

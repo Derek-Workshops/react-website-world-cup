@@ -1,28 +1,6 @@
-import React from 'react';
-
-const topScorers = [
-  { rank: 1, name: 'Lionel Messi', team: 'Argentina', flag: '🇦🇷', goals: 3, assists: 2 },
-  { rank: 2, name: 'Kylian Mbappé', team: 'France', flag: '🇫🇷', goals: 2, assists: 1 },
-  { rank: 3, name: 'Vinícius Jr.', team: 'Brazil', flag: '🇧🇷', goals: 2, assists: 3 },
-  { rank: 4, name: 'Harry Kane', team: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', goals: 2, assists: 0 },
-  { rank: 5, name: 'Pedri', team: 'Spain', flag: '🇪🇸', goals: 1, assists: 2 },
-];
-
-const teamStats = [
-  { team: 'Brazil', flag: '🇧🇷', goals: 5, shots: 28, possession: '64%', passAcc: '91%' },
-  { team: 'Argentina', flag: '🇦🇷', goals: 4, shots: 24, possession: '58%', passAcc: '88%' },
-  { team: 'France', flag: '🇫🇷', goals: 3, shots: 21, possession: '55%', passAcc: '87%' },
-  { team: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', goals: 3, shots: 19, possession: '52%', passAcc: '85%' },
-];
-
-const overallStats = [
-  { label: 'Goals Scored', value: '24', sub: 'across 8 matches', icon: '⚽' },
-  { label: 'Goals/Match', value: '3.0', sub: 'avg per game', icon: '📊' },
-  { label: 'Yellow Cards', value: '19', sub: 'in group stage', icon: '🟨' },
-  { label: 'Red Cards', value: '2', sub: 'in group stage', icon: '🟥' },
-  { label: 'Penalties', value: '4', sub: 'awarded so far', icon: '🎯' },
-  { label: 'Own Goals', value: '1', sub: 'recorded', icon: '🔄' },
-];
+import React, { useState, useEffect } from 'react';
+import { Match } from '../data/mockData';
+import { fetchAllGroupMatches } from '../api/sportsDb';
 
 const StatBar: React.FC<{ value: number; max: number; color?: string }> = ({
   value,
@@ -32,12 +10,74 @@ const StatBar: React.FC<{ value: number; max: number; color?: string }> = ({
   <div className="w-full bg-white/10 rounded-full h-1.5">
     <div
       className="h-1.5 rounded-full transition-all duration-500"
-      style={{ width: `${(value / max) * 100}%`, backgroundColor: color }}
+      style={{ width: max > 0 ? `${(value / max) * 100}%` : '0%', backgroundColor: color }}
     />
   </div>
 );
 
+interface TeamGoals {
+  team: string;
+  flag: string;
+  goals: number;
+}
+
 const StatsPage: React.FC = () => {
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAllGroupMatches()
+      .then(data => { if (!cancelled) setMatches(data); })
+      .catch(err => console.error('Failed to fetch stats:', err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const playedMatches = matches.filter(m => m.homeScore != null);
+  const totalGoals = playedMatches.reduce((sum, m) => sum + (m.homeScore || 0) + (m.awayScore || 0), 0);
+  const totalMatches = playedMatches.length;
+  const avgGoals = totalMatches > 0 ? (totalGoals / totalMatches).toFixed(1) : '0';
+
+  const draws = playedMatches.filter(m => m.homeScore === m.awayScore).length;
+  const scheduledMatches = matches.length;
+
+  const teamGoalsMap = new Map<string, { flag: string; goals: number }>();
+  for (const m of playedMatches) {
+    if (m.homeScore != null) {
+      const existing = teamGoalsMap.get(m.homeTeam) || { flag: m.homeFlag, goals: 0 };
+      existing.goals += m.homeScore;
+      teamGoalsMap.set(m.homeTeam, existing);
+    }
+    if (m.awayScore != null) {
+      const existing = teamGoalsMap.get(m.awayTeam) || { flag: m.awayFlag, goals: 0 };
+      existing.goals += m.awayScore;
+      teamGoalsMap.set(m.awayTeam, existing);
+    }
+  }
+  const topTeams: TeamGoals[] = Array.from(teamGoalsMap.entries())
+    .map(([team, data]) => ({ team, flag: data.flag, goals: data.goals }))
+    .sort((a, b) => b.goals - a.goals)
+    .slice(0, 6);
+
+  const overallStats = [
+    { label: 'Matches Played', value: String(totalMatches), sub: `of ${scheduledMatches} scheduled`, icon: '\u{1F3DF}\u{FE0F}' },
+    { label: 'Total Goals', value: String(totalGoals), sub: `across ${totalMatches} matches`, icon: '\u26BD' },
+    { label: 'Goals/Match', value: avgGoals, sub: 'avg per game', icon: '\u{1F4CA}' },
+    { label: 'Draws', value: String(draws), sub: 'matches drawn', icon: '\u{1F91D}' },
+    { label: 'Teams', value: '48', sub: 'nations competing', icon: '\u{1F30E}' },
+    { label: 'Host Cities', value: '16', sub: 'across 3 countries', icon: '\u{1F3D9}\u{FE0F}' },
+  ];
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <div className="inline-block w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/40 mt-4">Loading statistics...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       {/* Header */}
@@ -46,7 +86,7 @@ const StatsPage: React.FC = () => {
           Live Statistics
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Tournament Stats</h1>
-        <p className="text-white/40">Performance metrics and leaderboards from the 2026 World Cup</p>
+        <p className="text-white/40">Performance metrics from the 2026 World Cup, updated live</p>
       </div>
 
       {/* Overall Stats Grid */}
@@ -64,98 +104,68 @@ const StatsPage: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Top Scorers */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-          <div className="bg-[#003087] px-6 py-4">
-            <h2 className="text-white font-black text-lg">⚽ Top Scorers</h2>
-          </div>
-          <div className="divide-y divide-white/5">
-            {topScorers.map((player) => (
-              <div key={player.rank} className="px-6 py-4 flex items-center gap-4 hover:bg-white/3 transition-colors">
-                <span
-                  className={`text-sm font-black w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    player.rank === 1
-                      ? 'bg-[#f5a623] text-[#0a0a1a]'
-                      : player.rank === 2
-                      ? 'bg-white/30 text-white'
-                      : player.rank === 3
-                      ? 'bg-[#cd7f32]/50 text-white'
-                      : 'bg-white/10 text-white/50'
-                  }`}
-                >
-                  {player.rank}
-                </span>
-                <span className="text-2xl">{player.flag}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-white font-semibold truncate">{player.name}</div>
-                  <div className="text-white/40 text-xs">{player.team}</div>
-                </div>
-                <div className="flex items-center gap-4 text-right">
-                  <div>
-                    <div className="text-[#f5a623] font-black text-xl">{player.goals}</div>
-                    <div className="text-white/30 text-xs">Goals</div>
-                  </div>
-                  <div>
-                    <div className="text-white/70 font-bold text-xl">{player.assists}</div>
-                    <div className="text-white/30 text-xs">Assists</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Team Stats */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-          <div className="bg-[#c8102e] px-6 py-4">
-            <h2 className="text-white font-black text-lg">📊 Team Performance</h2>
-          </div>
-          <div className="p-6 space-y-6">
-            {teamStats.map((team, index) => (
-              <div key={team.team}>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{team.flag}</span>
-                    <span className="text-white font-semibold">{team.team}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm">
-                    <span className="text-white/50">{team.possession} poss.</span>
+      {/* Team Goals Leaderboard */}
+      {topTeams.length > 0 ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            <div className="bg-[#003087] px-6 py-4">
+              <h2 className="text-white font-black text-lg">{'\u26BD'} Top Scoring Teams</h2>
+            </div>
+            <div className="p-6 space-y-6">
+              {topTeams.map((team, index) => (
+                <div key={team.team}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{team.flag}</span>
+                      <span className="text-white font-semibold">{team.team}</span>
+                    </div>
                     <span className="text-[#f5a623] font-bold">{team.goals} goals</span>
                   </div>
+                  <StatBar value={team.goals} max={topTeams[0].goals} color={index === 0 ? '#f5a623' : '#003087'} />
                 </div>
-                <StatBar value={team.goals} max={teamStats[0].goals} color={index === 0 ? '#f5a623' : '#003087'} />
-                <div className="flex justify-between mt-1.5 text-xs text-white/30">
-                  <span>{team.shots} shots</span>
-                  <span>{team.passAcc} pass acc.</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Placeholder chart area */}
-      <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-        <div className="text-5xl mb-4">📈</div>
-        <h3 className="text-white font-bold text-xl mb-2">Advanced Analytics Coming Soon</h3>
-        <p className="text-white/40 text-sm max-w-md mx-auto">
-          Interactive charts, heat maps, and xG data will be available here once the tournament progresses.
-          This is a placeholder section ideal for integrating a charting library.
-        </p>
-        <div className="mt-6 grid grid-cols-3 gap-4 max-w-lg mx-auto opacity-30">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white/10 rounded-xl h-24 flex items-end justify-center pb-3 gap-1">
-              {[...Array(5)].map((_, j) => (
-                <div
-                  key={j}
-                  className="bg-[#f5a623] rounded-sm w-3"
-                  style={{ height: `${(Math.random() * 60 + 20)}%` }}
-                />
               ))}
             </div>
-          ))}
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+            <div className="bg-[#c8102e] px-6 py-4">
+              <h2 className="text-white font-black text-lg">{'\u{1F4CA}'} Match Results Breakdown</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              {playedMatches.slice(0, 8).map((m) => (
+                <div key={m.id} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="text-lg">{m.homeFlag}</span>
+                    <span className="text-white text-sm truncate">{m.homeTeam}</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-0.5 mx-2">
+                    <span className="text-white font-bold text-sm">{m.homeScore} - {m.awayScore}</span>
+                  </div>
+                  <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                    <span className="text-white text-sm truncate">{m.awayTeam}</span>
+                    <span className="text-lg">{m.awayFlag}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+      ) : (
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
+          <div className="text-5xl mb-4">{'\u26BD'}</div>
+          <h3 className="text-white font-bold text-xl mb-2">Tournament Hasn't Started Yet</h3>
+          <p className="text-white/40 text-sm max-w-md mx-auto">
+            Stats will populate automatically once matches begin on June 11, 2026.
+            Check back during the tournament for live goals, results, and team performance data.
+          </p>
+        </div>
+      )}
+
+      {/* Info */}
+      <div className="mt-8 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
+        <p className="text-white/60 text-sm">
+          Live data powered by <strong className="text-white/80">TheSportsDB</strong>. Stats update automatically as matches are played.
+        </p>
       </div>
     </div>
   );

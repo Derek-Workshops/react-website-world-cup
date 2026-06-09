@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { groups, Team } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { Team } from '../data/mockData';
+import { fetchGroupStandings } from '../api/sportsDb';
 
 const GroupTable: React.FC<{ groupName: string; teams: Team[] }> = ({ groupName, teams }) => (
   <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
@@ -59,6 +60,17 @@ const GroupTable: React.FC<{ groupName: string; teams: Team[] }> = ({ groupName,
 
 const GroupsPage: React.FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [groups, setGroups] = useState<Record<string, Team[]>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchGroupStandings()
+      .then(data => { if (!cancelled) setGroups(data); })
+      .catch(err => console.error('Failed to fetch groups:', err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   const displayGroups = selectedGroup
     ? { [selectedGroup]: groups[selectedGroup] }
@@ -105,17 +117,23 @@ const GroupsPage: React.FC = () => {
       </div>
 
       {/* Group tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {Object.entries(displayGroups).map(([name, teams]) => (
-          <GroupTable key={name} groupName={name} teams={teams} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-center py-20">
+          <div className="inline-block w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
+          <p className="text-white/40 mt-4">Loading group data...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {Object.entries(displayGroups).map(([name, teams]) => (
+            <GroupTable key={name} groupName={name} teams={teams} />
+          ))}
+        </div>
+      )}
 
       {/* Info banner */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data only.</strong> These standings are for demonstration purposes.
-          All match results and team data are fictional.
+          Live data powered by <strong className="text-white/80">TheSportsDB</strong>. Standings update automatically as matches are played.
         </p>
       </div>
     </div>
