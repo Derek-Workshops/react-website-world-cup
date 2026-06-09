@@ -88,6 +88,16 @@ export const upcomingMatches: Match[] = [
     homeFlag: '🇨🇴', awayFlag: '🇵🇪', homeScore: null, awayScore: null,
     venue: 'Estadio Azteca, Mexico City', stage: 'Group C',
   },
+  {
+    id: 7, date: 'Jun 22', time: '18:00', homeTeam: 'Brazil', awayTeam: 'Japan',
+    homeFlag: '🇧🇷', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
+    venue: 'Mercedes-Benz Stadium, Atlanta', stage: 'Group C',
+  },
+  {
+    id: 8, date: 'Jun 30', time: '20:00', homeTeam: 'Brazil', awayTeam: 'South Korea',
+    homeFlag: '🇧🇷', awayFlag: '🇰🇷', homeScore: null, awayScore: null,
+    venue: 'Arrowhead Stadium, Kansas City', stage: 'Round of 16',
+  },
 ];
 
 export const recentResults: Match[] = [
