@@ -117,6 +117,20 @@ export const tournamentStats: Stat[] = [
   { label: 'Host Countries', value: '3', icon: '🌎' },
 ];
 
+export interface Comment {
+  id: number;
+  name: string;
+  avatar: string;
+  message: string;
+  time: string;
+}
+
+export const fanComments: Comment[] = [
+  { id: 1, name: 'Sofia M.', avatar: '🇦🇷', message: 'Vamos Argentina! Messi is going to make history again. 🐐', time: '2h ago' },
+  { id: 2, name: 'James T.', avatar: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', message: 'Football is coming home this time, I can feel it!', time: '5h ago' },
+  { id: 3, name: 'Diego R.', avatar: '🇲🇽', message: 'Estadio Azteca is going to be electric. Can\'t wait! 🔥', time: '1d ago' },
+];
+
 export const featuredTeams = [
   { name: 'Argentina', flag: '🇦🇷', ranking: 1, coach: 'Lionel Scaloni', confederation: 'CONMEBOL' },
   { name: 'France', flag: '🇫🇷', ranking: 2, coach: 'Didier Deschamps', confederation: 'UEFA' },
