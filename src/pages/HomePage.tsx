@@ -1,9 +1,51 @@
 import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import { tournamentStats, upcomingMatches, Match } from '../data/mockData';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
 }
+
+const brazilMatches = upcomingMatches.filter(
+  (m) => m.homeTeam === 'Brazil' || m.awayTeam === 'Brazil',
+);
+
+const BrazilMatchCard: React.FC<{ match: Match }> = ({ match }) => (
+  <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
+    <div className="flex justify-between items-center mb-4">
+      <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.stage}</span>
+      <div className="text-right">
+        <div className="text-xs text-white/60 font-medium">{match.date}</div>
+        <div className="text-xs text-white/30">{match.time} local</div>
+      </div>
+    </div>
+
+    <div className="flex items-center gap-4">
+      <div className="flex-1 flex flex-col items-center gap-2">
+        <span className="text-5xl">{match.homeFlag}</span>
+        <span className="text-white font-semibold text-sm text-center">{match.homeTeam}</span>
+      </div>
+
+      <div className="flex flex-col items-center gap-1 min-w-[80px]">
+        <div className="bg-white/10 rounded-xl px-4 py-2">
+          <span className="text-white/60 font-bold text-sm">VS</span>
+        </div>
+        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#f5a623]/20 text-[#f5a623]">
+          Upcoming
+        </span>
+      </div>
+
+      <div className="flex-1 flex flex-col items-center gap-2">
+        <span className="text-5xl">{match.awayFlag}</span>
+        <span className="text-white font-semibold text-sm text-center">{match.awayTeam}</span>
+      </div>
+    </div>
+
+    <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-white/40">
+      <span>🏟️</span>
+      <span className="truncate">{match.venue}</span>
+    </div>
+  </div>
+);
 
 const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
   <div className="flex flex-col items-center bg-white/5 rounded-xl px-5 py-3 min-w-[72px]">
@@ -122,15 +164,23 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
-            <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
+            <h2 className="text-3xl font-black text-white">🇧🇷 Brazil's Upcoming Matches</h2>
+            <p className="text-white/40 text-sm mt-1">Next fixtures for the Seleção</p>
           </div>
         </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
-        </div>
+        {brazilMatches.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {brazilMatches.map((m) => (
+              <BrazilMatchCard key={m.id} match={m} />
+            ))}
+          </div>
+        ) : (
+          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
+            <span className="text-5xl">🗓️</span>
+            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
+            <p className="text-white/40 text-sm">Brazil's upcoming fixtures will appear here.</p>
+          </div>
+        )}
       </section>
 
       {/* ─── Recent Results ─── */}
