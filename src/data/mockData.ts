@@ -127,3 +127,33 @@ export const featuredTeams = [
   { name: 'Germany', flag: '🇩🇪', ranking: 12, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
   { name: 'Mexico', flag: '🇲🇽', ranking: 16, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
 ];
+
+export interface Venue {
+  id: number;
+  city: string;
+  stadium: string;
+  country: 'USA' | 'Canada' | 'Mexico';
+  flag: string;
+  capacity: number;
+  lat: number;
+  lng: number;
+}
+
+export const venues: Venue[] = [
+  { id: 1, city: 'New York / New Jersey', stadium: 'MetLife Stadium', country: 'USA', flag: '🇺🇸', capacity: 82500, lat: 40.8135, lng: -74.0745 },
+  { id: 2, city: 'Los Angeles', stadium: 'SoFi Stadium', country: 'USA', flag: '🇺🇸', capacity: 70240, lat: 33.9535, lng: -118.3392 },
+  { id: 3, city: 'Dallas', stadium: 'AT&T Stadium', country: 'USA', flag: '🇺🇸', capacity: 80000, lat: 32.7473, lng: -97.0945 },
+  { id: 4, city: 'San Francisco Bay Area', stadium: "Levi's Stadium", country: 'USA', flag: '🇺🇸', capacity: 68500, lat: 37.4030, lng: -121.9698 },
+  { id: 5, city: 'Miami', stadium: 'Hard Rock Stadium', country: 'USA', flag: '🇺🇸', capacity: 65326, lat: 25.9580, lng: -80.2389 },
+  { id: 6, city: 'Atlanta', stadium: 'Mercedes-Benz Stadium', country: 'USA', flag: '🇺🇸', capacity: 71000, lat: 33.7553, lng: -84.4006 },
+  { id: 7, city: 'Seattle', stadium: 'Lumen Field', country: 'USA', flag: '🇺🇸', capacity: 69000, lat: 47.5952, lng: -122.3316 },
+  { id: 8, city: 'Houston', stadium: 'NRG Stadium', country: 'USA', flag: '🇺🇸', capacity: 72220, lat: 29.6847, lng: -95.4107 },
+  { id: 9, city: 'Kansas City', stadium: 'Arrowhead Stadium', country: 'USA', flag: '🇺🇸', capacity: 76416, lat: 39.0489, lng: -94.4839 },
+  { id: 10, city: 'Boston', stadium: 'Gillette Stadium', country: 'USA', flag: '🇺🇸', capacity: 65878, lat: 42.0909, lng: -71.2643 },
+  { id: 11, city: 'Philadelphia', stadium: 'Lincoln Financial Field', country: 'USA', flag: '🇺🇸', capacity: 69596, lat: 39.9008, lng: -75.1675 },
+  { id: 12, city: 'Toronto', stadium: 'BMO Field', country: 'Canada', flag: '🇨🇦', capacity: 45736, lat: 43.6332, lng: -79.4185 },
+  { id: 13, city: 'Vancouver', stadium: 'BC Place', country: 'Canada', flag: '🇨🇦', capacity: 54500, lat: 49.2768, lng: -123.1119 },
+  { id: 14, city: 'Mexico City', stadium: 'Estadio Azteca', country: 'Mexico', flag: '🇲🇽', capacity: 87523, lat: 19.3029, lng: -99.1505 },
+  { id: 15, city: 'Guadalajara', stadium: 'Estadio Akron', country: 'Mexico', flag: '🇲🇽', capacity: 49850, lat: 20.6819, lng: -103.4625 },
+  { id: 16, city: 'Monterrey', stadium: 'Estadio BBVA', country: 'Mexico', flag: '🇲🇽', capacity: 53500, lat: 25.6692, lng: -100.2444 },
+];
