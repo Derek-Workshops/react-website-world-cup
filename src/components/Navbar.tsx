@@ -9,6 +9,7 @@ const navLinks = [
   { id: 'home', label: 'Home' },
   { id: 'groups', label: 'Groups' },
   { id: 'schedule', label: 'Schedule' },
+  { id: 'venues', label: 'Venues' },
   { id: 'teams', label: 'Teams' },
   { id: 'stats', label: 'Stats' },
 ];
