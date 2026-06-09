@@ -1,185 +1,199 @@
 import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import { practiceStats, practiceAreas, matters, jurisdictions } from '../data/mockData';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
 }
 
-const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
-  <div className="flex flex-col items-center bg-white/5 rounded-xl px-5 py-3 min-w-[72px]">
-    <span className="text-3xl font-bold text-[#f5a623] tabular-nums">{String(value).padStart(2, '0')}</span>
-    <span className="text-xs text-white/50 uppercase tracking-wider mt-1">{label}</span>
-  </div>
-);
-
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  // Placeholder countdown to Jun 14 2026 opening match
-  const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
-
   return (
     <div>
       {/* ─── Hero ─── */}
       <section
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0a0a1a 0%, #001a4d 50%, #0a0a1a 100%)',
+          background: 'linear-gradient(135deg, #07172e 0%, #0a1f3d 55%, #102a4f 100%)',
         }}
       >
-        {/* Background orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#003087]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#c8102e]/15 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Grid pattern overlay */}
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#b08d57]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-[#16335f]/40 rounded-full blur-3xl pointer-events-none" />
         <div
-          className="absolute inset-0 opacity-5 pointer-events-none"
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
+              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
           }}
         />
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <div className="flex justify-center mb-6">
-            <span className="text-8xl md:text-9xl drop-shadow-2xl">🏆</span>
-          </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-3xl">
+            <div className="inline-block border border-[#b08d57]/40 rounded-sm px-4 py-1.5 text-[#b08d57] text-xs font-semibold uppercase tracking-[0.3em] mb-8">
+              Latin America Practice Group
+            </div>
 
-          <div className="inline-block bg-[#f5a623]/10 border border-[#f5a623]/30 rounded-full px-4 py-1.5 text-[#f5a623] text-xs font-bold uppercase tracking-[0.3em] mb-6">
-            June 11 – July 19, 2026
-          </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-white leading-[1.1] mb-6">
+              Trusted counsel for the region&rsquo;s most
+              <span className="text-[#b08d57]"> significant transactions</span>
+            </h1>
 
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-black text-white leading-none mb-4 tracking-tight">
-            FIFA WORLD
-            <span className="block text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(90deg, #f5a623, #ffd700, #f5a623)' }}>
-              CUP 2026
-            </span>
-          </h1>
+            <p className="text-white/65 text-lg leading-relaxed max-w-2xl mb-10">
+              For more than three decades, Simpson Thacher has advised leading
+              corporations, financial institutions and investors on landmark M&amp;A,
+              capital markets, financing and dispute matters across Latin America.
+            </p>
 
-          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-4">
-            The biggest FIFA World Cup in history. 48 teams. 3 host nations.
-            104 matches across North America.
-          </p>
-
-          <div className="flex items-center justify-center gap-3 mb-10 text-sm text-white/50">
-            <span className="flex items-center gap-1.5">🇺🇸 United States</span>
-            <span className="text-[#f5a623]">•</span>
-            <span className="flex items-center gap-1.5">🇨🇦 Canada</span>
-            <span className="text-[#f5a623]">•</span>
-            <span className="flex items-center gap-1.5">🇲🇽 Mexico</span>
-          </div>
-
-          {/* Countdown */}
-          <div className="mb-10">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Opening Match Countdown</p>
-            <div className="flex justify-center gap-3">
-              <CountdownUnit value={countdown.days} label="Days" />
-              <CountdownUnit value={countdown.hours} label="Hours" />
-              <CountdownUnit value={countdown.minutes} label="Mins" />
-              <CountdownUnit value={countdown.seconds} label="Secs" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => onNavigate('practices')}
+                className="bg-[#b08d57] hover:bg-[#9a7846] text-[#0a1f3d] font-semibold px-8 py-3.5 rounded-sm transition-colors duration-200"
+              >
+                Explore Practice Areas
+              </button>
+              <button
+                onClick={() => onNavigate('experience')}
+                className="border border-white/25 text-white hover:bg-white/10 font-semibold px-8 py-3.5 rounded-sm transition-colors duration-200"
+              >
+                Representative Matters
+              </button>
             </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={() => onNavigate('schedule')}
-              className="bg-[#f5a623] hover:bg-[#e09510] text-[#0a0a1a] font-bold px-8 py-3.5 rounded-full transition-colors duration-200 shadow-lg shadow-[#f5a623]/20"
-            >
-              View Schedule
-            </button>
-            <button
-              onClick={() => onNavigate('groups')}
-              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full transition-colors duration-200 border border-white/20"
-            >
-              Explore Groups
-            </button>
-          </div>
-        </div>
-
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <span className="text-white/30 text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/30 to-transparent" />
         </div>
       </section>
 
-      {/* ─── Tournament Stats Strip ─── */}
-      <section className="bg-[#f5a623] py-4">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {tournamentStats.map((stat) => (
+      {/* ─── Stats strip ─── */}
+      <section className="bg-[#0a1f3d] border-y border-[#b08d57]/30 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {practiceStats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-2xl mb-0.5">{stat.icon}</div>
-                <div className="text-[#0a0a1a] font-black text-xl">{stat.value}</div>
-                <div className="text-[#0a0a1a]/60 text-xs font-medium">{stat.label}</div>
+                <div className="font-serif text-3xl text-[#b08d57]">{stat.value}</div>
+                <div className="text-white/55 text-xs mt-1 leading-snug">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Upcoming Matches ─── */}
+      {/* ─── Overview ─── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="flex items-center justify-between mb-8">
+        <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
-            <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
-            <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
-          </div>
-        </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
-        </div>
-      </section>
-
-      {/* ─── Recent Results ─── */}
-      <section className="border-y border-white/10 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
-          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
-            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CTA Banner ─── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div
-          className="rounded-3xl p-10 md:p-16 text-center relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #003087, #c8102e)' }}
-        >
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-              backgroundSize: '30px 30px',
-            }}
-          />
-          <div className="relative z-10">
-            <span className="text-6xl mb-4 block">⚽</span>
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-              Don't Miss a Single Match
-            </h2>
-            <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Explore team profiles, live standings, and the full match schedule for the 2026 FIFA World Cup.
+            <p className="text-[#b08d57] text-xs font-semibold uppercase tracking-[0.25em] mb-3">
+              The Practice
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button
-                onClick={() => onNavigate('teams')}
-                className="bg-[#f5a623] hover:bg-[#e09510] text-[#0a0a1a] font-bold px-8 py-3.5 rounded-full transition-colors duration-200"
-              >
-                Explore Teams
-              </button>
-              <button
-                onClick={() => onNavigate('stats')}
-                className="bg-white/20 hover:bg-white/30 text-white font-bold px-8 py-3.5 rounded-full transition-colors duration-200"
-              >
-                View Stats
-              </button>
-            </div>
+            <h2 className="font-serif text-3xl md:text-4xl text-[#0a1f3d] leading-tight">
+              A single, integrated team across the Americas
+            </h2>
           </div>
+          <div className="text-[#3a4456] leading-relaxed space-y-4">
+            <p>
+              Our Latin America practice brings together lawyers in New York, São Paulo
+              and Washington, D.C. to deliver seamless, cross-border advice. We combine
+              deep regional knowledge with the full strength of a leading global firm.
+            </p>
+            <p>
+              From multibillion-dollar acquisitions and international offerings to complex
+              financings and high-stakes arbitration, clients turn to us for the matters
+              that define markets.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Practice areas preview ─── */}
+      <section className="bg-white border-y border-[#0a1f3d]/10 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <p className="text-[#b08d57] text-xs font-semibold uppercase tracking-[0.25em] mb-2">
+                What We Do
+              </p>
+              <h2 className="font-serif text-3xl md:text-4xl text-[#0a1f3d]">Practice Areas</h2>
+            </div>
+            <button
+              onClick={() => onNavigate('practices')}
+              className="hidden sm:inline text-[#0a1f3d] hover:text-[#b08d57] text-sm font-semibold transition-colors"
+            >
+              View all →
+            </button>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {practiceAreas.slice(0, 6).map((area) => (
+              <div
+                key={area.id}
+                className="border border-[#0a1f3d]/10 rounded-sm p-6 hover:border-[#b08d57] hover:shadow-md transition-all duration-200 bg-[#f7f5f0]/40"
+              >
+                <div className="text-3xl mb-3">{area.icon}</div>
+                <h3 className="font-serif text-xl text-[#0a1f3d] mb-2">{area.name}</h3>
+                <p className="text-[#3a4456] text-sm leading-relaxed">{area.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Featured matters ─── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <p className="text-[#b08d57] text-xs font-semibold uppercase tracking-[0.25em] mb-2">
+          Selected Highlights
+        </p>
+        <h2 className="font-serif text-3xl md:text-4xl text-[#0a1f3d] mb-10">Recent Matters</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {matters.slice(0, 3).map((m) => (
+            <div key={m.id} className="border-t-2 border-[#b08d57] pt-5">
+              <div className="flex items-center gap-2 text-sm text-[#3a4456] mb-3">
+                <span className="text-lg">{m.flag}</span>
+                <span>{m.country}</span>
+                <span className="text-[#b08d57]">·</span>
+                <span>{m.year}</span>
+              </div>
+              <h3 className="font-serif text-lg text-[#0a1f3d] mb-2">{m.headline}</h3>
+              <p className="text-[#3a4456] text-sm leading-relaxed">{m.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Regional reach ─── */}
+      <section className="bg-[#0a1f3d] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-[#b08d57] text-xs font-semibold uppercase tracking-[0.25em] mb-3">
+            Regional Reach
+          </p>
+          <h2 className="font-serif text-3xl text-white mb-8">
+            Active across the region&rsquo;s key markets
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {jurisdictions.map((j) => (
+              <span
+                key={j.name}
+                className="inline-flex items-center gap-2 border border-white/15 rounded-full px-4 py-2 text-white/80 text-sm"
+              >
+                <span>{j.flag}</span>
+                {j.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CTA ─── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="border border-[#0a1f3d]/15 rounded-sm p-10 md:p-16 text-center bg-white">
+          <h2 className="font-serif text-3xl md:text-4xl text-[#0a1f3d] mb-4">
+            Discuss your matter with our team
+          </h2>
+          <p className="text-[#3a4456] text-lg mb-8 max-w-xl mx-auto">
+            Connect with the lawyers who lead our Latin America practice across New York
+            and São Paulo.
+          </p>
+          <button
+            onClick={() => onNavigate('team')}
+            className="bg-[#0a1f3d] hover:bg-[#102a4f] text-white font-semibold px-8 py-3.5 rounded-sm transition-colors duration-200"
+          >
+            Meet the Team
+          </button>
         </div>
       </section>
     </div>

@@ -3,12 +3,12 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import GroupsPage from './pages/GroupsPage';
-import SchedulePage from './pages/SchedulePage';
-import TeamsPage from './pages/TeamsPage';
-import StatsPage from './pages/StatsPage';
+import PracticeAreasPage from './pages/PracticeAreasPage';
+import ExperiencePage from './pages/ExperiencePage';
+import TeamPage from './pages/TeamPage';
+import RecognitionPage from './pages/RecognitionPage';
 
-type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats';
+type Page = 'home' | 'practices' | 'experience' | 'team' | 'recognition';
 
 function App() {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -22,26 +22,26 @@ function App() {
     switch (activePage) {
       case 'home':
         return <HomePage onNavigate={navigate} />;
-      case 'groups':
-        return <GroupsPage />;
-      case 'schedule':
-        return <SchedulePage />;
-      case 'teams':
-        return <TeamsPage />;
-      case 'stats':
-        return <StatsPage />;
+      case 'practices':
+        return <PracticeAreasPage />;
+      case 'experience':
+        return <ExperiencePage />;
+      case 'team':
+        return <TeamPage />;
+      case 'recognition':
+        return <RecognitionPage />;
       default:
         return <HomePage onNavigate={navigate} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a]">
+    <div className="min-h-screen bg-[#f7f5f0]">
       <Navbar activePage={activePage} onNavigate={navigate} />
       <main className={activePage !== 'home' ? 'pt-16' : ''}>
         {renderPage()}
       </main>
-      <Footer />
+      <Footer onNavigate={navigate} />
     </div>
   );
 }

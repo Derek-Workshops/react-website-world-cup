@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', system-ui, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0a0a1a;
-  color: #ffffff;
+  background-color: #f7f5f0;
+  color: #0a1f3d;
 }
