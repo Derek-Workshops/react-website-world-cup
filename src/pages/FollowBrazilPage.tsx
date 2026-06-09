@@ -2,6 +2,7 @@ import React from 'react';
 import { brazilRoadToFinal, RoadStep } from '../data/mockData';
 
 const stageAccent: Record<string, string> = {
+  'Round of 32': '#14b8a6',
   'Round of 16': '#22c55e',
   'Quarter-final': '#eab308',
   'Semi-final': '#f97316',
@@ -40,7 +41,7 @@ const RoadCard: React.FC<{ step: RoadStep; index: number; isLast: boolean }> = (
             {isFinal ? '🏆 ' : ''}{step.stage}
           </span>
           <span className="text-sm text-white/60 font-medium">
-            {step.date} · {step.time} local
+            {step.date} · {step.time}
           </span>
         </div>
 

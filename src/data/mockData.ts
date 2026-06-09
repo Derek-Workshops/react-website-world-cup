@@ -145,9 +145,21 @@ export interface RoadStep {
 // Opponents are projections based on the mock group standings and depend on other results.
 export const brazilRoadToFinal: RoadStep[] = [
   {
+    stage: 'Round of 32',
+    date: 'Jun 29, 2026',
+    time: '5:00 PM ET',
+    opponent: 'Morocco',
+    opponentFlag: '🇲🇦',
+    opponentNote: 'Projected third-placed qualifier',
+    stadium: 'NRG Stadium',
+    city: 'Houston',
+    country: 'USA',
+    flag: '🇺🇸',
+  },
+  {
     stage: 'Round of 16',
-    date: 'Jul 1, 2026',
-    time: '15:00',
+    date: 'Jul 5, 2026',
+    time: '3:00 PM ET',
     opponent: 'England',
     opponentFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
     opponentNote: 'Projected runner-up, Group D',
@@ -159,7 +171,7 @@ export const brazilRoadToFinal: RoadStep[] = [
   {
     stage: 'Quarter-final',
     date: 'Jul 10, 2026',
-    time: '18:00',
+    time: '6:00 PM ET',
     opponent: 'United States',
     opponentFlag: '🇺🇸',
     opponentNote: 'Projected winner, Group A',
@@ -171,7 +183,7 @@ export const brazilRoadToFinal: RoadStep[] = [
   {
     stage: 'Semi-final',
     date: 'Jul 14, 2026',
-    time: '20:00',
+    time: '8:00 PM ET',
     opponent: 'Argentina',
     opponentFlag: '🇦🇷',
     opponentNote: 'Projected winner, Group B',
@@ -183,7 +195,7 @@ export const brazilRoadToFinal: RoadStep[] = [
   {
     stage: 'Final',
     date: 'Jul 19, 2026',
-    time: '15:00',
+    time: '3:00 PM ET',
     opponent: 'France',
     opponentFlag: '🇫🇷',
     opponentNote: 'Projected winner, Group D',
