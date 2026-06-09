@@ -107,15 +107,15 @@ export const groups: Record<string, Team[]> = {
   ],
 };
 
-// Real matchday-1 fixtures (dates, venues and local kickoff times) of the 2026 World Cup.
+// Real matchday-1 fixtures of the 2026 World Cup. Kickoff times are shown in Eastern Time (ET).
 export const upcomingMatches: Match[] = [
   {
-    id: 1, date: 'Jun 11', time: '13:00', homeTeam: 'Mexico', awayTeam: 'South Africa',
+    id: 1, date: 'Jun 11', time: '15:00', homeTeam: 'Mexico', awayTeam: 'South Africa',
     homeFlag: '🇲🇽', awayFlag: '🇿🇦', homeScore: null, awayScore: null,
     venue: 'Estadio Azteca, Mexico City', stage: 'Group A',
   },
   {
-    id: 2, date: 'Jun 11', time: '20:00', homeTeam: 'South Korea', awayTeam: 'Czech Republic',
+    id: 2, date: 'Jun 11', time: '22:00', homeTeam: 'South Korea', awayTeam: 'Czech Republic',
     homeFlag: '🇰🇷', awayFlag: '🇨🇿', homeScore: null, awayScore: null,
     venue: 'Estadio Akron, Guadalajara', stage: 'Group A',
   },
@@ -125,12 +125,12 @@ export const upcomingMatches: Match[] = [
     venue: 'BMO Field, Toronto', stage: 'Group B',
   },
   {
-    id: 4, date: 'Jun 12', time: '18:00', homeTeam: 'United States', awayTeam: 'Paraguay',
+    id: 4, date: 'Jun 12', time: '21:00', homeTeam: 'United States', awayTeam: 'Paraguay',
     homeFlag: '🇺🇸', awayFlag: '🇵🇾', homeScore: null, awayScore: null,
     venue: 'SoFi Stadium, Los Angeles', stage: 'Group D',
   },
   {
-    id: 5, date: 'Jun 13', time: '12:00', homeTeam: 'Qatar', awayTeam: 'Switzerland',
+    id: 5, date: 'Jun 13', time: '15:00', homeTeam: 'Qatar', awayTeam: 'Switzerland',
     homeFlag: '🇶🇦', awayFlag: '🇨🇭', homeScore: null, awayScore: null,
     venue: "Levi's Stadium, San Francisco Bay Area", stage: 'Group B',
   },
@@ -145,17 +145,17 @@ export const upcomingMatches: Match[] = [
     venue: 'Gillette Stadium, Boston', stage: 'Group C',
   },
   {
-    id: 8, date: 'Jun 13', time: '21:00', homeTeam: 'Australia', awayTeam: 'Turkey',
+    id: 8, date: 'Jun 14', time: '00:00', homeTeam: 'Australia', awayTeam: 'Turkey',
     homeFlag: '🇦🇺', awayFlag: '🇹🇷', homeScore: null, awayScore: null,
     venue: 'BC Place, Vancouver', stage: 'Group D',
   },
   {
-    id: 9, date: 'Jun 14', time: '12:00', homeTeam: 'Germany', awayTeam: 'Curaçao',
+    id: 9, date: 'Jun 14', time: '13:00', homeTeam: 'Germany', awayTeam: 'Curaçao',
     homeFlag: '🇩🇪', awayFlag: '🇨🇼', homeScore: null, awayScore: null,
     venue: 'NRG Stadium, Houston', stage: 'Group E',
   },
   {
-    id: 10, date: 'Jun 14', time: '15:00', homeTeam: 'Netherlands', awayTeam: 'Japan',
+    id: 10, date: 'Jun 14', time: '16:00', homeTeam: 'Netherlands', awayTeam: 'Japan',
     homeFlag: '🇳🇱', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
     venue: 'AT&T Stadium, Dallas', stage: 'Group F',
   },
@@ -165,7 +165,7 @@ export const upcomingMatches: Match[] = [
     venue: 'Lincoln Financial Field, Philadelphia', stage: 'Group E',
   },
   {
-    id: 12, date: 'Jun 14', time: '20:00', homeTeam: 'Sweden', awayTeam: 'Tunisia',
+    id: 12, date: 'Jun 14', time: '22:00', homeTeam: 'Sweden', awayTeam: 'Tunisia',
     homeFlag: '🇸🇪', awayFlag: '🇹🇳', homeScore: null, awayScore: null,
     venue: 'Estadio BBVA, Monterrey', stage: 'Group F',
   },

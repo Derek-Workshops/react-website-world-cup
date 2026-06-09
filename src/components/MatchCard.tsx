@@ -7,7 +7,7 @@ const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isRe
       <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.stage}</span>
       <div className="text-right">
         <div className="text-xs text-white/60 font-medium">{match.date}</div>
-        <div className="text-xs text-white/30">{match.time} local</div>
+        <div className="text-xs text-white/30">{match.time} ET</div>
       </div>
     </div>
 
