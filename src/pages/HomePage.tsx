@@ -1,5 +1,7 @@
 import React from 'react';
 import { tournamentStats } from '../data/mockData';
+import MatchCard from '../components/MatchCard';
+import { useWorldCupMatches } from '../hooks/useWorldCupMatches';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -15,6 +17,7 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   // Placeholder countdown to Jun 14 2026 opening match
   const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  const { upcoming, results, loading } = useWorldCupMatches();
 
   return (
     <div>
@@ -123,25 +126,47 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
-            <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
+            <p className="text-white/40 text-sm mt-1">Live fixtures from the 2026 World Cup</p>
           </div>
+          <button
+            onClick={() => onNavigate('schedule')}
+            className="hidden sm:inline text-[#f5a623] hover:text-[#ffd700] text-sm font-bold transition-colors"
+          >
+            Full schedule →
+          </button>
         </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
-        </div>
+        {loading ? (
+          <p className="text-white/40 text-sm py-8">Loading live fixtures…</p>
+        ) : upcoming.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {upcoming.slice(0, 3).map((m) => (
+              <MatchCard key={m.id} match={m} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-white/40 text-sm py-8">No upcoming fixtures available.</p>
+        )}
       </section>
 
       {/* ─── Recent Results ─── */}
       <section className="border-y border-white/10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
-          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
-            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
-          </div>
+          {loading ? (
+            <p className="text-white/40 text-sm py-8">Loading results…</p>
+          ) : results.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {results.slice(0, 3).map((m) => (
+                <MatchCard key={m.id} match={m} isResult />
+              ))}
+            </div>
+          ) : (
+            <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
+              <span className="text-5xl">⚽</span>
+              <h3 className="text-white font-bold text-xl">No results yet</h3>
+              <p className="text-white/40 text-sm">Match results will appear here once the tournament begins.</p>
+            </div>
+          )}
         </div>
       </section>
 

@@ -1,64 +1,37 @@
-import React, { useState } from 'react';
-import { upcomingMatches, recentResults, Match } from '../data/mockData';
+import React, { useMemo, useState } from 'react';
+import MatchCard from '../components/MatchCard';
+import { useWorldCupMatches } from '../hooks/useWorldCupMatches';
 
-const stages = ['All', 'Group A', 'Group B', 'Group C', 'Group D'];
-
-const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isResult = false }) => (
-  <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
-    <div className="flex justify-between items-center mb-4">
-      <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.stage}</span>
-      <div className="text-right">
-        <div className="text-xs text-white/60 font-medium">{match.date}</div>
-        <div className="text-xs text-white/30">{match.time} local</div>
-      </div>
+const SkeletonCard: React.FC = () => (
+  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 animate-pulse">
+    <div className="flex justify-between mb-6">
+      <div className="h-3 w-20 bg-white/10 rounded" />
+      <div className="h-3 w-12 bg-white/10 rounded" />
     </div>
-
-    <div className="flex items-center gap-4">
-      {/* Home */}
-      <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.homeFlag}</span>
-        <span className="text-white font-semibold text-sm text-center">{match.homeTeam}</span>
-      </div>
-
-      {/* Score / VS */}
-      <div className="flex flex-col items-center gap-1 min-w-[80px]">
-        {isResult ? (
-          <div className="bg-[#003087] rounded-xl px-4 py-2 text-white font-black text-2xl tabular-nums text-center">
-            {match.homeScore} – {match.awayScore}
-          </div>
-        ) : (
-          <div className="bg-white/10 rounded-xl px-4 py-2">
-            <span className="text-white/60 font-bold text-sm">VS</span>
-          </div>
-        )}
-        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isResult ? 'bg-green-500/20 text-green-400' : 'bg-[#f5a623]/20 text-[#f5a623]'}`}>
-          {isResult ? 'FT' : 'Upcoming'}
-        </span>
-      </div>
-
-      {/* Away */}
-      <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.awayFlag}</span>
-        <span className="text-white font-semibold text-sm text-center">{match.awayTeam}</span>
-      </div>
+    <div className="flex items-center justify-between">
+      <div className="w-12 h-12 rounded-full bg-white/10" />
+      <div className="h-8 w-16 bg-white/10 rounded-xl" />
+      <div className="w-12 h-12 rounded-full bg-white/10" />
     </div>
-
-    <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-white/40">
-      <span>🏟️</span>
-      <span className="truncate">{match.venue}</span>
-    </div>
+    <div className="h-3 w-full bg-white/10 rounded mt-6" />
   </div>
 );
 
 const SchedulePage: React.FC = () => {
+  const { upcoming, results, loading, error, source } = useWorldCupMatches();
   const [activeStage, setActiveStage] = useState('All');
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
 
-  const filterMatches = (matches: Match[]) =>
-    activeStage === 'All' ? matches : matches.filter((m) => m.stage === activeStage);
+  const activeMatches = activeTab === 'upcoming' ? upcoming : results;
 
-  const upcomingFiltered = filterMatches(upcomingMatches);
-  const resultsFiltered = filterMatches(recentResults);
+  // Build the stage filter dynamically from whichever matches are loaded.
+  const stages = useMemo(() => {
+    const unique = Array.from(new Set(activeMatches.map((m) => m.stage)));
+    return ['All', ...unique];
+  }, [activeMatches]);
+
+  const filtered =
+    activeStage === 'All' ? activeMatches : activeMatches.filter((m) => m.stage === activeStage);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -68,7 +41,7 @@ const SchedulePage: React.FC = () => {
           Match Schedule
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Fixtures & Results</h1>
-        <p className="text-white/40">All 104 matches of the 2026 FIFA World Cup</p>
+        <p className="text-white/40">Live 2026 FIFA World Cup fixtures</p>
       </div>
 
       {/* Tabs */}
@@ -76,7 +49,7 @@ const SchedulePage: React.FC = () => {
         {(['upcoming', 'results'] as const).map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => { setActiveTab(tab); setActiveStage('All'); }}
             className={`px-6 py-2.5 rounded-full text-sm font-bold capitalize transition-colors ${
               activeTab === tab
                 ? 'bg-[#f5a623] text-[#0a0a1a]'
@@ -89,50 +62,63 @@ const SchedulePage: React.FC = () => {
       </div>
 
       {/* Stage filter */}
-      <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {stages.map((s) => (
-          <button
-            key={s}
-            onClick={() => setActiveStage(s)}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-              activeStage === s
-                ? 'bg-[#003087] text-white border border-[#003087]'
-                : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
-            }`}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-
-      {/* Match cards */}
-      {activeTab === 'upcoming' ? (
-        upcomingFiltered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {upcomingFiltered.map((m) => (
-              <MatchCard key={m.id} match={m} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-white/30 py-16">No upcoming matches for this stage.</p>
-        )
-      ) : (
-        resultsFiltered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {resultsFiltered.map((m) => (
-              <MatchCard key={m.id} match={m} isResult />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-white/30 py-16">No results for this stage yet.</p>
-        )
+      {!loading && stages.length > 1 && (
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {stages.map((s) => (
+            <button
+              key={s}
+              onClick={() => setActiveStage(s)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                activeStage === s
+                  ? 'bg-[#003087] text-white border border-[#003087]'
+                  : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
       )}
 
-      {/* Placeholder note */}
-      <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
-        <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full 104-match schedule will be populated here.
+      {/* Match cards */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      ) : filtered.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {filtered.map((m) => (
+            <MatchCard key={m.id} match={m} isResult={activeTab === 'results'} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-white/30 py-16">
+          {activeTab === 'upcoming'
+            ? 'No upcoming matches for this stage.'
+            : 'No results yet — the tournament has not started.'}
         </p>
+      )}
+
+      {/* Data source note */}
+      <div
+        className={`mt-12 rounded-2xl p-6 text-center border ${
+          source === 'live'
+            ? 'bg-green-500/10 border-green-500/30'
+            : 'bg-[#003087]/20 border-[#003087]/40'
+        }`}
+      >
+        {source === 'live' ? (
+          <p className="text-white/60 text-sm">
+            🟢 <strong className="text-white/80">Live data</strong> from TheSportsDB · FIFA World Cup 2026
+          </p>
+        ) : (
+          <p className="text-white/60 text-sm">
+            ⚠️ <strong className="text-white/80">Showing sample data.</strong> Live feed unavailable
+            {error ? ` (${error})` : ''}.
+          </p>
+        )}
       </div>
     </div>
   );
