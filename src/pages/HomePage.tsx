@@ -1,5 +1,6 @@
 import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import { tournamentStats, upcomingMatches, recentResults } from '../data/mockData';
+import MatchCard from '../components/MatchCard';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -125,22 +126,36 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
             <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
           </div>
+          <button
+            onClick={() => onNavigate('schedule')}
+            className="hidden sm:block text-[#f5a623] hover:text-[#e09510] text-sm font-bold transition-colors"
+          >
+            View all →
+          </button>
         </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {upcomingMatches.slice(0, 3).map((match) => (
+            <MatchCard key={match.id} match={match} />
+          ))}
         </div>
       </section>
 
       {/* ─── Recent Results ─── */}
       <section className="border-y border-white/10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
-          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
-            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-black text-white">Recent Results</h2>
+            <button
+              onClick={() => onNavigate('schedule')}
+              className="hidden sm:block text-[#f5a623] hover:text-[#e09510] text-sm font-bold transition-colors"
+            >
+              View all →
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {recentResults.map((match) => (
+              <MatchCard key={match.id} match={match} isResult />
+            ))}
           </div>
         </div>
       </section>
