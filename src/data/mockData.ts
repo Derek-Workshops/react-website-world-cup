@@ -1,27 +1,29 @@
-export interface Team {
+export interface Episode {
   id: number;
-  name: string;
-  flag: string;
-  group: string;
-  played: number;
-  won: number;
-  drawn: number;
-  lost: number;
-  points: number;
+  number: number;
+  title: string;
+  description: string;
+  date: string;
+  duration: string;
+  guest: string;
+  guestEmoji: string;
+  tags: string[];
+  audioUrl: string;
+  // Optional attribution shown under the episode (e.g. for licensed audio).
+  credit?: string;
 }
 
-export interface Match {
-  id: number;
-  date: string;
-  time: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeFlag: string;
-  awayFlag: string;
-  homeScore: number | null;
-  awayScore: number | null;
-  venue: string;
-  stage: string;
+export interface Host {
+  name: string;
+  role: string;
+  emoji: string;
+  bio: string;
+  funFact: string;
+}
+
+export interface Platform {
+  name: string;
+  icon: string;
 }
 
 export interface Stat {
@@ -30,100 +32,153 @@ export interface Stat {
   icon: string;
 }
 
-export const groups: Record<string, Team[]> = {
-  A: [
-    { id: 1, name: 'United States', flag: '🇺🇸', group: 'A', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 2, name: 'Mexico', flag: '🇲🇽', group: 'A', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 3, name: 'Panama', flag: '🇵🇦', group: 'A', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 4, name: 'Bolivia', flag: '🇧🇴', group: 'A', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  B: [
-    { id: 5, name: 'Argentina', flag: '🇦🇷', group: 'B', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 6, name: 'Chile', flag: '🇨🇱', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 7, name: 'Peru', flag: '🇵🇪', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 8, name: 'Canada', flag: '🇨🇦', group: 'B', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  C: [
-    { id: 9, name: 'Brazil', flag: '🇧🇷', group: 'C', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 10, name: 'Colombia', flag: '🇨🇴', group: 'C', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 11, name: 'Germany', flag: '🇩🇪', group: 'C', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 12, name: 'Japan', flag: '🇯🇵', group: 'C', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  D: [
-    { id: 13, name: 'France', flag: '🇫🇷', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 14, name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 15, name: 'Spain', flag: '🇪🇸', group: 'D', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 16, name: 'South Korea', flag: '🇰🇷', group: 'D', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-};
+// Real tennis interviews from "The Tennis Podcast" by Kevin G. McClure (2005),
+// all licensed CC BY-ND 2.5. Files are bundled unmodified in public/audio.
+const audio = (file: string): string => process.env.PUBLIC_URL + '/audio/' + file;
+const ttpCredit = (edition: string): string =>
+  `Audio: "The Tennis Podcast - ${edition}" by Kevin G. McClure, CC BY-ND 2.5.`;
 
-export const upcomingMatches: Match[] = [
+export const showName = 'Break Point';
+export const showTagline = 'A weekly tennis podcast';
+
+export const episodes: Episode[] = [
   {
-    id: 1, date: 'Jun 14', time: '18:00', homeTeam: 'United States', awayTeam: 'Mexico',
-    homeFlag: '🇺🇸', awayFlag: '🇲🇽', homeScore: null, awayScore: null,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
+    id: 7,
+    number: 43,
+    title: 'Inside the Game with Jim Courier',
+    description:
+      'A real interview with former World No. 1 and four-time Grand Slam champion Jim Courier on life on tour and the modern game.',
+    date: 'Jun 13, 2026',
+    duration: '3 min',
+    guest: 'Jim Courier',
+    guestEmoji: '🏅',
+    tags: ['Interview', 'Legends'],
+    audioUrl: audio('jim-courier-interview.mp3'),
+    credit: ttpCredit('Edition 6'),
   },
   {
-    id: 2, date: 'Jun 15', time: '21:00', homeTeam: 'Argentina', awayTeam: 'Chile',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇱', homeScore: null, awayScore: null,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
+    id: 1,
+    number: 42,
+    title: 'A Conversation with Corey Clarke',
+    description:
+      'From the Break Point archive: an early interview covering the tennis world, the tour, and the stories behind the sport.',
+    date: 'Jun 6, 2026',
+    duration: '24 min',
+    guest: 'Corey Clarke',
+    guestEmoji: '🎾',
+    tags: ['Interview', 'History'],
+    audioUrl: audio('corey-clarke-interview.mp3'),
+    credit: ttpCredit('Edition 2'),
   },
   {
-    id: 3, date: 'Jun 16', time: '15:00', homeTeam: 'Brazil', awayTeam: 'Germany',
-    homeFlag: '🇧🇷', awayFlag: '🇩🇪', homeScore: null, awayScore: null,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
+    id: 2,
+    number: 41,
+    title: 'Coaching the Game with Michele Krause',
+    description:
+      'An interview on developing players, coaching, and growing the sport at every level.',
+    date: 'May 30, 2026',
+    duration: '16 min',
+    guest: 'Michele Krause',
+    guestEmoji: '🧑‍🏫',
+    tags: ['Interview', 'Coaching'],
+    audioUrl: audio('michele-krause-interview.mp3'),
+    credit: ttpCredit('Edition 3'),
   },
   {
-    id: 4, date: 'Jun 17', time: '20:00', homeTeam: 'France', awayTeam: 'Spain',
-    homeFlag: '🇫🇷', awayFlag: '🇪🇸', homeScore: null, awayScore: null,
-    venue: 'Hard Rock Stadium, Miami', stage: 'Group D',
+    id: 3,
+    number: 40,
+    title: 'Talking Tennis with Jeff Williams',
+    description:
+      'A wide-ranging conversation from the Break Point archive on the game and the people who make it.',
+    date: 'May 23, 2026',
+    duration: '13 min',
+    guest: 'Jeff Williams',
+    guestEmoji: '🎙️',
+    tags: ['Interview', 'History'],
+    audioUrl: audio('jeff-williams-interview.mp3'),
+    credit: ttpCredit('Edition 5'),
   },
   {
-    id: 5, date: 'Jun 18', time: '17:00', homeTeam: 'England', awayTeam: 'Japan',
-    homeFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
-    venue: 'Lumen Field, Seattle', stage: 'Group D',
+    id: 4,
+    number: 39,
+    title: 'Training the Pros with Pat Etcheberry',
+    description:
+      'The renowned fitness trainer behind many tour champions talks conditioning, speed, and what it takes to compete.',
+    date: 'May 16, 2026',
+    duration: '22 min',
+    guest: 'Pat Etcheberry',
+    guestEmoji: '💪',
+    tags: ['Interview', 'Fitness'],
+    audioUrl: audio('pat-etcheberry-interview.mp3'),
+    credit: ttpCredit('Edition 9'),
   },
   {
-    id: 6, date: 'Jun 19', time: '19:00', homeTeam: 'Colombia', awayTeam: 'Peru',
-    homeFlag: '🇨🇴', awayFlag: '🇵🇪', homeScore: null, awayScore: null,
-    venue: 'Estadio Azteca, Mexico City', stage: 'Group C',
+    id: 5,
+    number: 38,
+    title: 'The Business of Tennis with Jim Baugh',
+    description:
+      'A tennis-industry leader on growing participation and the future of the sport.',
+    date: 'May 9, 2026',
+    duration: '10 min',
+    guest: 'Jim Baugh',
+    guestEmoji: '🏢',
+    tags: ['Interview', 'Industry'],
+    audioUrl: audio('jim-baugh-interview.mp3'),
+    credit: ttpCredit('Edition 4'),
+  },
+  {
+    id: 6,
+    number: 37,
+    title: 'Life in the Game with Ilana Kloss',
+    description:
+      'The former World No. 1 doubles player and World TeamTennis leader on her career and life in tennis.',
+    date: 'May 2, 2026',
+    duration: '16 min',
+    guest: 'Ilana Kloss',
+    guestEmoji: '🌟',
+    tags: ['Interview', 'Legends'],
+    audioUrl: audio('ilana-kloss-interview.mp3'),
+    credit: ttpCredit('Edition 8'),
   },
 ];
 
-export const recentResults: Match[] = [
+export const hosts: Host[] = [
   {
-    id: 101, date: 'Jun 10', time: '20:00', homeTeam: 'United States', awayTeam: 'Bolivia',
-    homeFlag: '🇺🇸', awayFlag: '🇧🇴', homeScore: 3, awayScore: 0,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
+    name: 'Jordan Reyes',
+    role: 'Host & Founder',
+    emoji: '🎙️',
+    bio: 'Lifelong tennis obsessive and former college player who started Break Point from a spare bedroom.',
+    funFact: 'Once hit with a top-100 pro at a charity event (and lost 6-0).',
   },
   {
-    id: 102, date: 'Jun 11', time: '18:00', homeTeam: 'Argentina', awayTeam: 'Canada',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇦', homeScore: 2, awayScore: 0,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
+    name: 'Priya Sharma',
+    role: 'Co-Host & Analyst',
+    emoji: '📊',
+    bio: 'Turns match stats into stories. If there is a pattern in the data, Priya has already found it.',
+    funFact: 'Tracks every Grand Slam final on a giant spreadsheet.',
   },
   {
-    id: 103, date: 'Jun 12', time: '21:00', homeTeam: 'Brazil', awayTeam: 'Colombia',
-    homeFlag: '🇧🇷', awayFlag: '🇨🇴', homeScore: 1, awayScore: 1,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
+    name: 'Marcus Bell',
+    role: 'Co-Host & Producer',
+    emoji: '🎧',
+    bio: 'The voice that keeps the show on the rails and the laughs coming between the serious analysis.',
+    funFact: 'Owns 14 racquets and refuses to explain why.',
   },
 ];
 
-export const tournamentStats: Stat[] = [
-  { label: 'Total Goals', value: '24', icon: '⚽' },
-  { label: 'Matches Played', value: '8', icon: '🏟️' },
-  { label: 'Yellow Cards', value: '19', icon: '🟨' },
-  { label: 'Top Scorer', value: 'L. Messi (3)', icon: '👟' },
-  { label: 'Attendance', value: '640,000+', icon: '👥' },
-  { label: 'Host Countries', value: '3', icon: '🌎' },
+export const platforms: Platform[] = [
+  { name: 'Apple Podcasts', icon: '🎧' },
+  { name: 'Spotify', icon: '🟢' },
+  { name: 'YouTube', icon: '▶️' },
+  { name: 'Overcast', icon: '📻' },
+  { name: 'RSS Feed', icon: '📡' },
 ];
 
-export const featuredTeams = [
-  { name: 'Argentina', flag: '🇦🇷', ranking: 1, coach: 'Lionel Scaloni', confederation: 'CONMEBOL' },
-  { name: 'France', flag: '🇫🇷', ranking: 2, coach: 'Didier Deschamps', confederation: 'UEFA' },
-  { name: 'Brazil', flag: '🇧🇷', ranking: 3, coach: 'Dorival Júnior', confederation: 'CONMEBOL' },
-  { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', ranking: 4, coach: 'Gareth Southgate', confederation: 'UEFA' },
-  { name: 'Spain', flag: '🇪🇸', ranking: 5, coach: 'Luis de la Fuente', confederation: 'UEFA' },
-  { name: 'United States', flag: '🇺🇸', ranking: 11, coach: 'Mauricio Pochettino', confederation: 'CONCACAF' },
-  { name: 'Germany', flag: '🇩🇪', ranking: 12, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
-  { name: 'Mexico', flag: '🇲🇽', ranking: 16, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
+export const showStats: Stat[] = [
+  { label: 'Episodes', value: '42', icon: '🎙️' },
+  { label: 'Monthly Listens', value: '85K+', icon: '🎧' },
+  { label: 'Avg. Length', value: '52 min', icon: '⏱️' },
+  { label: 'Seasons', value: '3', icon: '📚' },
+  { label: 'Guests', value: '60+', icon: '⭐' },
+  { label: 'New Episodes', value: 'Weekly', icon: '🗓️' },
 ];
