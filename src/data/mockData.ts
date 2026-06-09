@@ -32,12 +32,11 @@ export interface Stat {
   icon: string;
 }
 
-// Royalty-free sample audio so the player actually works in the demo.
-const SAMPLE_AUDIO = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-
-// Real professional tennis player interview (Jim Courier), bundled in public/audio.
-// Source: "The Tennis Podcast - Edition 6" by Kevin G. McClure, licensed CC BY-ND 2.5.
-const COURIER_INTERVIEW_AUDIO = process.env.PUBLIC_URL + '/audio/jim-courier-interview.mp3';
+// Real tennis interviews from "The Tennis Podcast" by Kevin G. McClure (2005),
+// all licensed CC BY-ND 2.5. Files are bundled unmodified in public/audio.
+const audio = (file: string): string => process.env.PUBLIC_URL + '/audio/' + file;
+const ttpCredit = (edition: string): string =>
+  `Audio: "The Tennis Podcast - ${edition}" by Kevin G. McClure, CC BY-ND 2.5.`;
 
 export const showName = 'Break Point';
 export const showTagline = 'A weekly tennis podcast';
@@ -54,86 +53,92 @@ export const episodes: Episode[] = [
     guest: 'Jim Courier',
     guestEmoji: '🏅',
     tags: ['Interview', 'Legends'],
-    audioUrl: COURIER_INTERVIEW_AUDIO,
-    credit: 'Audio: "The Tennis Podcast - Edition 6" by Kevin G. McClure, CC BY-ND 2.5.',
+    audioUrl: audio('jim-courier-interview.mp3'),
+    credit: ttpCredit('Edition 6'),
   },
   {
     id: 1,
     number: 42,
-    title: 'The Art of the Second Serve',
+    title: 'A Conversation with Corey Clarke',
     description:
-      'We break down why the second serve wins (and loses) the biggest matches, and how the pros build pressure point by point.',
+      'From the Break Point archive: an early interview covering the tennis world, the tour, and the stories behind the sport.',
     date: 'Jun 6, 2026',
-    duration: '52 min',
-    guest: 'Coach Maria Alvarez',
+    duration: '24 min',
+    guest: 'Corey Clarke',
     guestEmoji: '🎾',
-    tags: ['Technique', 'Strategy'],
-    audioUrl: SAMPLE_AUDIO,
+    tags: ['Interview', 'History'],
+    audioUrl: audio('corey-clarke-interview.mp3'),
+    credit: ttpCredit('Edition 2'),
   },
   {
     id: 2,
     number: 41,
-    title: 'Clay vs. Grass: A Surface Showdown',
+    title: 'Coaching the Game with Michele Krause',
     description:
-      'Sliding on clay or charging the net on grass? We argue about which surface makes the most exciting tennis.',
+      'An interview on developing players, coaching, and growing the sport at every level.',
     date: 'May 30, 2026',
-    duration: '47 min',
-    guest: 'Former Pro Daniel Okafor',
-    guestEmoji: '🟧',
-    tags: ['Debate', 'History'],
-    audioUrl: SAMPLE_AUDIO,
+    duration: '16 min',
+    guest: 'Michele Krause',
+    guestEmoji: '🧑‍🏫',
+    tags: ['Interview', 'Coaching'],
+    audioUrl: audio('michele-krause-interview.mp3'),
+    credit: ttpCredit('Edition 3'),
   },
   {
     id: 3,
     number: 40,
-    title: 'Inside the Mind of a Returner',
+    title: 'Talking Tennis with Jeff Williams',
     description:
-      'A sports psychologist joins us to talk nerves, routines, and the mental game of facing a 130 mph serve.',
+      'A wide-ranging conversation from the Break Point archive on the game and the people who make it.',
     date: 'May 23, 2026',
-    duration: '58 min',
-    guest: 'Dr. Lena Park',
-    guestEmoji: '🧠',
-    tags: ['Mindset', 'Interview'],
-    audioUrl: SAMPLE_AUDIO,
+    duration: '13 min',
+    guest: 'Jeff Williams',
+    guestEmoji: '🎙️',
+    tags: ['Interview', 'History'],
+    audioUrl: audio('jeff-williams-interview.mp3'),
+    credit: ttpCredit('Edition 5'),
   },
   {
     id: 4,
     number: 39,
-    title: 'Grand Slam Preview Spectacular',
+    title: 'Training the Pros with Pat Etcheberry',
     description:
-      'Our bold predictions, dark horses, and the storylines we cannot wait to follow at the next major.',
+      'The renowned fitness trainer behind many tour champions talks conditioning, speed, and what it takes to compete.',
     date: 'May 16, 2026',
-    duration: '63 min',
-    guest: 'The whole crew',
-    guestEmoji: '🏆',
-    tags: ['Preview', 'Predictions'],
-    audioUrl: SAMPLE_AUDIO,
+    duration: '22 min',
+    guest: 'Pat Etcheberry',
+    guestEmoji: '💪',
+    tags: ['Interview', 'Fitness'],
+    audioUrl: audio('pat-etcheberry-interview.mp3'),
+    credit: ttpCredit('Edition 9'),
   },
   {
     id: 5,
     number: 38,
-    title: 'The One-Handed Backhand Lives On',
+    title: 'The Business of Tennis with Jim Baugh',
     description:
-      'It is rare, it is beautiful, and it is endangered. We celebrate the most elegant shot in the game.',
+      'A tennis-industry leader on growing participation and the future of the sport.',
     date: 'May 9, 2026',
-    duration: '44 min',
-    guest: 'Analyst Sofia Rinaldi',
-    guestEmoji: '🎯',
-    tags: ['Technique', 'History'],
-    audioUrl: SAMPLE_AUDIO,
+    duration: '10 min',
+    guest: 'Jim Baugh',
+    guestEmoji: '🏢',
+    tags: ['Interview', 'Industry'],
+    audioUrl: audio('jim-baugh-interview.mp3'),
+    credit: ttpCredit('Edition 4'),
   },
   {
     id: 6,
     number: 37,
-    title: 'From the Junior Circuit to the Tour',
+    title: 'Life in the Game with Ilana Kloss',
     description:
-      'A rising star shares the grind of travel, qualifying rounds, and chasing a dream one tournament at a time.',
+      'The former World No. 1 doubles player and World TeamTennis leader on her career and life in tennis.',
     date: 'May 2, 2026',
-    duration: '50 min',
-    guest: 'Rising Star Theo Nguyen',
+    duration: '16 min',
+    guest: 'Ilana Kloss',
     guestEmoji: '🌟',
-    tags: ['Interview', 'Career'],
-    audioUrl: SAMPLE_AUDIO,
+    tags: ['Interview', 'Legends'],
+    audioUrl: audio('ilana-kloss-interview.mp3'),
+    credit: ttpCredit('Edition 8'),
   },
 ];
 
