@@ -1,5 +1,8 @@
-import React from 'react';
-import { tournamentStats, upcomingMatches, recentResults, Match } from '../data/mockData';
+import React, { useEffect, useMemo, useState } from 'react';
+import MatchCard from '../components/MatchCard';
+import { LoadingState, ErrorState, EmptyState } from '../components/MatchListState';
+import { useFixtures } from '../hooks/useFixtures';
+import { getUpcoming, getResults, Fixture } from '../services/worldCupApi';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -12,56 +15,69 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
   </div>
 );
 
-const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isResult = false }) => (
-  <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
-    <div className="flex justify-between items-center mb-4">
-      <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.stage}</span>
-      <div className="text-right">
-        <div className="text-xs text-white/60 font-medium">{match.date}</div>
-        <div className="text-xs text-white/30">{match.time} local</div>
-      </div>
-    </div>
+interface Countdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
-    <div className="flex items-center gap-4">
-      {/* Home */}
-      <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.homeFlag}</span>
-        <span className="text-white font-semibold text-sm text-center">{match.homeTeam}</span>
-      </div>
+const diffToCountdown = (target: number, now: number): Countdown | null => {
+  const ms = target - now;
+  if (ms <= 0) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  return {
+    days: Math.floor(totalSeconds / 86400),
+    hours: Math.floor((totalSeconds % 86400) / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
+  };
+};
 
-      {/* Score / VS */}
-      <div className="flex flex-col items-center gap-1 min-w-[80px]">
-        {isResult ? (
-          <div className="bg-[#003087] rounded-xl px-4 py-2 text-white font-black text-2xl tabular-nums text-center">
-            {match.homeScore} – {match.awayScore}
-          </div>
-        ) : (
-          <div className="bg-white/10 rounded-xl px-4 py-2">
-            <span className="text-white/60 font-bold text-sm">VS</span>
-          </div>
-        )}
-        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isResult ? 'bg-green-500/20 text-green-400' : 'bg-[#f5a623]/20 text-[#f5a623]'}`}>
-          {isResult ? 'FT' : 'Upcoming'}
-        </span>
-      </div>
-
-      {/* Away */}
-      <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.awayFlag}</span>
-        <span className="text-white font-semibold text-sm text-center">{match.awayTeam}</span>
-      </div>
-    </div>
-
-    <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-white/40">
-      <span>🏟️</span>
-      <span className="truncate">{match.venue}</span>
-    </div>
-  </div>
-);
+const useCountdown = (target: number | null): Countdown | null => {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (target === null) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [target]);
+  return target === null ? null : diffToCountdown(target, now);
+};
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  // Placeholder countdown to Jun 14 2026 opening match
-  const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  const { fixtures, loading, error } = useFixtures();
+
+  const upcoming = useMemo(() => getUpcoming(fixtures), [fixtures]);
+  const results = useMemo(() => getResults(fixtures), [fixtures]);
+
+  const firstKickoff = useMemo(() => {
+    const next = upcoming.find((f) => f.timestamp);
+    return next?.timestamp ? new Date(next.timestamp).getTime() : null;
+  }, [upcoming]);
+  const countdown = useCountdown(firstKickoff);
+
+  const goals = results.reduce((sum, f) => sum + (f.homeScore ?? 0) + (f.awayScore ?? 0), 0);
+  const liveStats = [
+    { label: 'Teams', value: '48', icon: '🏳️' },
+    { label: 'Total Matches', value: '104', icon: '🏟️' },
+    { label: 'Host Nations', value: '3', icon: '🌎' },
+    { label: 'Matches Played', value: String(results.length), icon: '⚽' },
+    { label: 'Goals Scored', value: String(goals), icon: '🥅' },
+    { label: 'Fixtures Listed', value: String(fixtures.length), icon: '🗓️' },
+  ];
+
+  const renderMatches = (list: Fixture[], emptyIcon: string, emptyMsg: string) => {
+    if (loading) return <LoadingState />;
+    if (error) return <ErrorState message={error} />;
+    if (list.length === 0) return <EmptyState icon={emptyIcon} title="Nothing here yet" message={emptyMsg} />;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {list.slice(0, 3).map((m) => (
+          <MatchCard key={m.id} match={m} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -117,15 +133,17 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Countdown */}
-          <div className="mb-10">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Opening Match Countdown</p>
-            <div className="flex justify-center gap-3">
-              <CountdownUnit value={countdown.days} label="Days" />
-              <CountdownUnit value={countdown.hours} label="Hours" />
-              <CountdownUnit value={countdown.minutes} label="Mins" />
-              <CountdownUnit value={countdown.seconds} label="Secs" />
+          {countdown && (
+            <div className="mb-10">
+              <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Opening Match Countdown</p>
+              <div className="flex justify-center gap-3">
+                <CountdownUnit value={countdown.days} label="Days" />
+                <CountdownUnit value={countdown.hours} label="Hours" />
+                <CountdownUnit value={countdown.minutes} label="Mins" />
+                <CountdownUnit value={countdown.seconds} label="Secs" />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
@@ -154,7 +172,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="bg-[#f5a623] py-4">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {tournamentStats.map((stat) => (
+            {liveStats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-2xl mb-0.5">{stat.icon}</div>
                 <div className="text-[#0a0a1a] font-black text-xl">{stat.value}</div>
@@ -170,7 +188,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
-            <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
+            <p className="text-white/40 text-sm mt-1">Next fixtures of the tournament</p>
           </div>
           <button
             onClick={() => onNavigate('schedule')}
@@ -179,11 +197,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             View all →
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {upcomingMatches.slice(0, 3).map((m) => (
-            <MatchCard key={m.id} match={m} />
-          ))}
-        </div>
+        {renderMatches(upcoming, '🗓️', 'No upcoming fixtures are listed right now.')}
       </section>
 
       {/* ─── Recent Results ─── */}
@@ -198,11 +212,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               View all →
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {recentResults.map((m) => (
-              <MatchCard key={m.id} match={m} isResult />
-            ))}
-          </div>
+          {renderMatches(results, '⚽', 'No matches have been played yet — results will appear once the tournament kicks off.')}
         </div>
       </section>
 
