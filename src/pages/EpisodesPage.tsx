@@ -35,6 +35,9 @@ const EpisodeCard: React.FC<{ episode: Episode }> = ({ episode }) => (
           </div>
           <AudioPlayer src={episode.audioUrl} compact />
         </div>
+        {episode.credit && (
+          <p className="text-white/25 text-[11px] mt-3">{episode.credit}</p>
+        )}
       </div>
     </div>
   </div>

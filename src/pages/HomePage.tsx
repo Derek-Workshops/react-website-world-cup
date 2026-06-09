@@ -138,6 +138,9 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div className="flex justify-center md:justify-start">
                 <AudioPlayer src={latest.audioUrl} />
               </div>
+              {latest.credit && (
+                <p className="text-white/30 text-[11px] mt-4">{latest.credit}</p>
+              )}
             </div>
           </div>
         </div>

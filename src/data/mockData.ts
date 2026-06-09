@@ -9,6 +9,8 @@ export interface Episode {
   guestEmoji: string;
   tags: string[];
   audioUrl: string;
+  // Optional attribution shown under the episode (e.g. for licensed audio).
+  credit?: string;
 }
 
 export interface Host {
@@ -33,10 +35,28 @@ export interface Stat {
 // Royalty-free sample audio so the player actually works in the demo.
 const SAMPLE_AUDIO = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
+// Real professional tennis player interview (Jim Courier), bundled in public/audio.
+// Source: "The Tennis Podcast - Edition 6" by Kevin G. McClure, licensed CC BY-ND 2.5.
+const COURIER_INTERVIEW_AUDIO = process.env.PUBLIC_URL + '/audio/jim-courier-interview.mp3';
+
 export const showName = 'Break Point';
 export const showTagline = 'A weekly tennis podcast';
 
 export const episodes: Episode[] = [
+  {
+    id: 7,
+    number: 43,
+    title: 'Inside the Game with Jim Courier',
+    description:
+      'A real interview with former World No. 1 and four-time Grand Slam champion Jim Courier on life on tour and the modern game.',
+    date: 'Jun 13, 2026',
+    duration: '3 min',
+    guest: 'Jim Courier',
+    guestEmoji: '🏅',
+    tags: ['Interview', 'Legends'],
+    audioUrl: COURIER_INTERVIEW_AUDIO,
+    credit: 'Audio: "The Tennis Podcast - Edition 6" by Kevin G. McClure, CC BY-ND 2.5.',
+  },
   {
     id: 1,
     number: 42,
