@@ -1,5 +1,5 @@
 import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import { tournamentStats, upcomingMatches, recentResults } from '../data/mockData';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -126,10 +126,27 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
           </div>
         </div>
-        <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-          <span className="text-5xl">🗓️</span>
-          <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {upcomingMatches.map((match) => (
+            <div key={match.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-semibold text-[#f5a623] uppercase tracking-wider">{match.stage}</span>
+                <span className="text-xs text-white/40">{match.date} · {match.time}</span>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-2xl">{match.homeFlag}</span>
+                  <span className="text-white font-bold text-sm truncate">{match.homeTeam}</span>
+                </div>
+                <span className="text-white/30 text-xs font-bold">VS</span>
+                <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                  <span className="text-white font-bold text-sm truncate">{match.awayTeam}</span>
+                  <span className="text-2xl">{match.awayFlag}</span>
+                </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-white/5 text-xs text-white/30 truncate">📍 {match.venue}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -137,10 +154,31 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="border-y border-white/10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
-          <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
-            <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {recentResults.map((match) => (
+              <div key={match.id} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/[0.08] transition-colors">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-semibold text-[#f5a623] uppercase tracking-wider">{match.stage}</span>
+                  <span className="text-xs text-white/40">{match.date}</span>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="text-2xl">{match.homeFlag}</span>
+                    <span className="text-white font-bold text-sm truncate">{match.homeTeam}</span>
+                  </div>
+                  <div className="bg-white/10 rounded-lg px-3 py-1 flex items-center gap-1.5">
+                    <span className="text-white font-black text-lg">{match.homeScore}</span>
+                    <span className="text-white/30 text-xs">–</span>
+                    <span className="text-white font-black text-lg">{match.awayScore}</span>
+                  </div>
+                  <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                    <span className="text-white font-bold text-sm truncate">{match.awayTeam}</span>
+                    <span className="text-2xl">{match.awayFlag}</span>
+                  </div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-white/5 text-xs text-white/30 truncate">📍 {match.venue}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
