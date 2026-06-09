@@ -1,6 +1,7 @@
 import React from 'react';
-import { tournamentStats, upcomingMatches, recentResults } from '../data/mockData';
+import { tournamentStats } from '../data/mockData';
 import MatchCard from '../components/MatchCard';
+import { useWorldCupMatches } from '../hooks/useWorldCupMatches';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -13,9 +14,37 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
   </div>
 );
 
+const DataSourceBadge: React.FC<{ source: 'loading' | 'live' | 'fallback' }> = ({ source }) => {
+  if (source === 'live') {
+    return (
+      <span className="inline-flex items-center gap-1.5 bg-green-500/15 text-green-400 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+        <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+        Live
+      </span>
+    );
+  }
+  if (source === 'fallback') {
+    return (
+      <span className="inline-flex items-center bg-white/10 text-white/50 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+        Cached
+      </span>
+    );
+  }
+  return null;
+};
+
+const MatchSkeletonGrid: React.FC = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    {[0, 1, 2].map((i) => (
+      <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-5 h-44 animate-pulse" />
+    ))}
+  </div>
+);
+
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   // Placeholder countdown to Jun 14 2026 opening match
   const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  const { upcoming, results, source } = useWorldCupMatches();
 
   return (
     <div>
@@ -123,7 +152,10 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
+              <DataSourceBadge source={source} />
+            </div>
             <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
           </div>
           <button
@@ -133,11 +165,15 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             View all →
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {upcomingMatches.slice(0, 3).map((match) => (
-            <MatchCard key={match.id} match={match} />
-          ))}
-        </div>
+        {source === 'loading' ? (
+          <MatchSkeletonGrid />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {upcoming.slice(0, 3).map((match) => (
+              <MatchCard key={match.id} match={match} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* ─── Recent Results ─── */}
@@ -152,11 +188,21 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               View all →
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {recentResults.map((match) => (
-              <MatchCard key={match.id} match={match} isResult />
-            ))}
-          </div>
+          {source === 'loading' ? (
+            <MatchSkeletonGrid />
+          ) : results.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {results.slice(0, 3).map((match) => (
+                <MatchCard key={match.id} match={match} isResult />
+              ))}
+            </div>
+          ) : (
+            <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
+              <span className="text-5xl">⚽</span>
+              <h3 className="text-white font-bold text-xl">No results yet</h3>
+              <p className="text-white/40 text-sm">Match results will appear here once the tournament kicks off.</p>
+            </div>
+          )}
         </div>
       </section>
 
