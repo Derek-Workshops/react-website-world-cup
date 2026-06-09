@@ -11,6 +11,7 @@ const navLinks = [
   { id: 'schedule', label: 'Schedule' },
   { id: 'teams', label: 'Teams' },
   { id: 'stats', label: 'Stats' },
+  { id: 'follow-brazil', label: '🇧🇷 Follow Brazil' },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ activePage, onNavigate }) => {

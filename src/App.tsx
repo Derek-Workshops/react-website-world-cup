@@ -7,8 +7,9 @@ import GroupsPage from './pages/GroupsPage';
 import SchedulePage from './pages/SchedulePage';
 import TeamsPage from './pages/TeamsPage';
 import StatsPage from './pages/StatsPage';
+import FollowBrazilPage from './pages/FollowBrazilPage';
 
-type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats';
+type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats' | 'follow-brazil';
 
 function App() {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -30,6 +31,8 @@ function App() {
         return <TeamsPage />;
       case 'stats':
         return <StatsPage />;
+      case 'follow-brazil':
+        return <FollowBrazilPage />;
       default:
         return <HomePage onNavigate={navigate} />;
     }
