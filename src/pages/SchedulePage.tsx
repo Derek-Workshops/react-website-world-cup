@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { upcomingMatches, recentResults, Match } from '../data/mockData';
 
-const stages = ['All', 'Group A', 'Group B', 'Group C', 'Group D'];
+const rounds = ['All', 'NBA Finals', 'Conf. Finals'];
 
 const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isResult = false }) => (
   <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
     <div className="flex justify-between items-center mb-4">
-      <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.stage}</span>
+      <div>
+        <div className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">{match.round}</div>
+        <div className="text-xs text-white/40 font-medium mt-0.5">{match.label}</div>
+      </div>
       <div className="text-right">
         <div className="text-xs text-white/60 font-medium">{match.date}</div>
-        <div className="text-xs text-white/30">{match.time} local</div>
+        <div className="text-xs text-white/30">{match.time} ET</div>
       </div>
     </div>
 
     <div className="flex items-center gap-4">
       {/* Home */}
       <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.homeFlag}</span>
+        <span className="text-5xl">{match.homeLogo}</span>
         <span className="text-white font-semibold text-sm text-center">{match.homeTeam}</span>
       </div>
 
@@ -32,13 +35,13 @@ const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isRe
           </div>
         )}
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isResult ? 'bg-green-500/20 text-green-400' : 'bg-[#f5a623]/20 text-[#f5a623]'}`}>
-          {isResult ? 'FT' : 'Upcoming'}
+          {isResult ? 'Final' : 'Upcoming'}
         </span>
       </div>
 
       {/* Away */}
       <div className="flex-1 flex flex-col items-center gap-2">
-        <span className="text-5xl">{match.awayFlag}</span>
+        <span className="text-5xl">{match.awayLogo}</span>
         <span className="text-white font-semibold text-sm text-center">{match.awayTeam}</span>
       </div>
     </div>
@@ -51,11 +54,11 @@ const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isRe
 );
 
 const SchedulePage: React.FC = () => {
-  const [activeStage, setActiveStage] = useState('All');
+  const [activeRound, setActiveRound] = useState('All');
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
 
   const filterMatches = (matches: Match[]) =>
-    activeStage === 'All' ? matches : matches.filter((m) => m.stage === activeStage);
+    activeRound === 'All' ? matches : matches.filter((m) => m.round === activeRound);
 
   const upcomingFiltered = filterMatches(upcomingMatches);
   const resultsFiltered = filterMatches(recentResults);
@@ -65,10 +68,10 @@ const SchedulePage: React.FC = () => {
       {/* Header */}
       <div className="text-center mb-10">
         <div className="inline-block bg-[#f5a623]/10 border border-[#f5a623]/30 rounded-full px-4 py-1.5 text-[#f5a623] text-xs font-bold uppercase tracking-[0.3em] mb-4">
-          Match Schedule
+          Finals Schedule
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Fixtures & Results</h1>
-        <p className="text-white/40">All 104 matches of the 2026 FIFA World Cup</p>
+        <p className="text-white/40">The best-of-7 NBA Finals series · Celtics vs Thunder</p>
       </div>
 
       {/* Tabs */}
@@ -90,12 +93,12 @@ const SchedulePage: React.FC = () => {
 
       {/* Stage filter */}
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {stages.map((s) => (
+        {rounds.map((s) => (
           <button
             key={s}
-            onClick={() => setActiveStage(s)}
+            onClick={() => setActiveRound(s)}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-              activeStage === s
+              activeRound === s
                 ? 'bg-[#003087] text-white border border-[#003087]'
                 : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
             }`}
@@ -114,7 +117,7 @@ const SchedulePage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-white/30 py-16">No upcoming matches for this stage.</p>
+          <p className="text-center text-white/30 py-16">No upcoming games for this round.</p>
         )
       ) : (
         resultsFiltered.length > 0 ? (
@@ -124,14 +127,14 @@ const SchedulePage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-white/30 py-16">No results for this stage yet.</p>
+          <p className="text-center text-white/30 py-16">No results for this round yet.</p>
         )
       )}
 
       {/* Placeholder note */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full 104-match schedule will be populated here.
+          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full Finals schedule will be populated here as games are played.
         </p>
       </div>
     </div>

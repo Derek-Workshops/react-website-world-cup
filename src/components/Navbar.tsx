@@ -7,7 +7,7 @@ interface NavbarProps {
 
 const navLinks = [
   { id: 'home', label: 'Home' },
-  { id: 'groups', label: 'Groups' },
+  { id: 'groups', label: 'Standings' },
   { id: 'schedule', label: 'Schedule' },
   { id: 'teams', label: 'Teams' },
   { id: 'stats', label: 'Stats' },
@@ -25,13 +25,13 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, onNavigate }) => {
             onClick={() => onNavigate('home')}
             className="flex items-center gap-3 group"
           >
-            <span className="text-3xl">🏆</span>
+            <span className="text-3xl">🏀</span>
             <div className="text-left">
               <div className="text-[#f5a623] font-bold text-lg leading-tight tracking-wide">
-                FIFA WORLD CUP
+                NBA FINALS
               </div>
               <div className="text-white/70 text-xs tracking-[0.2em] uppercase">
-                USA · Canada · Mexico 2026
+                Celtics · Thunder · 2026
               </div>
             </div>
           </button>
