@@ -30,100 +30,171 @@ export interface Stat {
   icon: string;
 }
 
+// Official group-stage draw for the 2026 FIFA World Cup (final draw held Dec 5, 2025).
+// The tournament has not kicked off yet, so all standings start at zero.
 export const groups: Record<string, Team[]> = {
   A: [
-    { id: 1, name: 'United States', flag: '🇺🇸', group: 'A', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 2, name: 'Mexico', flag: '🇲🇽', group: 'A', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 3, name: 'Panama', flag: '🇵🇦', group: 'A', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 4, name: 'Bolivia', flag: '🇧🇴', group: 'A', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
+    { id: 1, name: 'Mexico', flag: '🇲🇽', group: 'A', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 2, name: 'South Africa', flag: '🇿🇦', group: 'A', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 3, name: 'South Korea', flag: '🇰🇷', group: 'A', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 4, name: 'Czech Republic', flag: '🇨🇿', group: 'A', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
   ],
   B: [
-    { id: 5, name: 'Argentina', flag: '🇦🇷', group: 'B', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 6, name: 'Chile', flag: '🇨🇱', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 7, name: 'Peru', flag: '🇵🇪', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 8, name: 'Canada', flag: '🇨🇦', group: 'B', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
+    { id: 5, name: 'Canada', flag: '🇨🇦', group: 'B', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 6, name: 'Bosnia and Herzegovina', flag: '🇧🇦', group: 'B', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 7, name: 'Qatar', flag: '🇶🇦', group: 'B', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 8, name: 'Switzerland', flag: '🇨🇭', group: 'B', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
   ],
   C: [
-    { id: 9, name: 'Brazil', flag: '🇧🇷', group: 'C', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 10, name: 'Colombia', flag: '🇨🇴', group: 'C', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 11, name: 'Germany', flag: '🇩🇪', group: 'C', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 12, name: 'Japan', flag: '🇯🇵', group: 'C', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
+    { id: 9, name: 'Brazil', flag: '🇧🇷', group: 'C', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 10, name: 'Morocco', flag: '🇲🇦', group: 'C', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 11, name: 'Haiti', flag: '🇭🇹', group: 'C', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 12, name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', group: 'C', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
   ],
   D: [
-    { id: 13, name: 'France', flag: '🇫🇷', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 14, name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 15, name: 'Spain', flag: '🇪🇸', group: 'D', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 16, name: 'South Korea', flag: '🇰🇷', group: 'D', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
+    { id: 13, name: 'United States', flag: '🇺🇸', group: 'D', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 14, name: 'Paraguay', flag: '🇵🇾', group: 'D', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 15, name: 'Australia', flag: '🇦🇺', group: 'D', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 16, name: 'Turkey', flag: '🇹🇷', group: 'D', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  E: [
+    { id: 17, name: 'Germany', flag: '🇩🇪', group: 'E', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 18, name: 'Curaçao', flag: '🇨🇼', group: 'E', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 19, name: 'Ivory Coast', flag: '🇨🇮', group: 'E', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 20, name: 'Ecuador', flag: '🇪🇨', group: 'E', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  F: [
+    { id: 21, name: 'Netherlands', flag: '🇳🇱', group: 'F', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 22, name: 'Japan', flag: '🇯🇵', group: 'F', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 23, name: 'Sweden', flag: '🇸🇪', group: 'F', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 24, name: 'Tunisia', flag: '🇹🇳', group: 'F', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  G: [
+    { id: 25, name: 'Belgium', flag: '🇧🇪', group: 'G', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 26, name: 'Egypt', flag: '🇪🇬', group: 'G', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 27, name: 'Iran', flag: '🇮🇷', group: 'G', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 28, name: 'New Zealand', flag: '🇳🇿', group: 'G', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  H: [
+    { id: 29, name: 'Spain', flag: '🇪🇸', group: 'H', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 30, name: 'Cape Verde', flag: '🇨🇻', group: 'H', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 31, name: 'Saudi Arabia', flag: '🇸🇦', group: 'H', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 32, name: 'Uruguay', flag: '🇺🇾', group: 'H', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  I: [
+    { id: 33, name: 'France', flag: '🇫🇷', group: 'I', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 34, name: 'Senegal', flag: '🇸🇳', group: 'I', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 35, name: 'Iraq', flag: '🇮🇶', group: 'I', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 36, name: 'Norway', flag: '🇳🇴', group: 'I', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  J: [
+    { id: 37, name: 'Argentina', flag: '🇦🇷', group: 'J', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 38, name: 'Algeria', flag: '🇩🇿', group: 'J', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 39, name: 'Austria', flag: '🇦🇹', group: 'J', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 40, name: 'Jordan', flag: '🇯🇴', group: 'J', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  K: [
+    { id: 41, name: 'Portugal', flag: '🇵🇹', group: 'K', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 42, name: 'DR Congo', flag: '🇨🇩', group: 'K', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 43, name: 'Uzbekistan', flag: '🇺🇿', group: 'K', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 44, name: 'Colombia', flag: '🇨🇴', group: 'K', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+  ],
+  L: [
+    { id: 45, name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'L', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 46, name: 'Croatia', flag: '🇭🇷', group: 'L', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 47, name: 'Ghana', flag: '🇬🇭', group: 'L', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
+    { id: 48, name: 'Panama', flag: '🇵🇦', group: 'L', played: 0, won: 0, drawn: 0, lost: 0, points: 0 },
   ],
 };
 
+// Real matchday-1 fixtures of the 2026 World Cup. Kickoff times are shown in Eastern Time (ET).
 export const upcomingMatches: Match[] = [
   {
-    id: 1, date: 'Jun 14', time: '18:00', homeTeam: 'United States', awayTeam: 'Mexico',
-    homeFlag: '🇺🇸', awayFlag: '🇲🇽', homeScore: null, awayScore: null,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
+    id: 1, date: 'Jun 11', time: '15:00', homeTeam: 'Mexico', awayTeam: 'South Africa',
+    homeFlag: '🇲🇽', awayFlag: '🇿🇦', homeScore: null, awayScore: null,
+    venue: 'Estadio Azteca, Mexico City', stage: 'Group A',
   },
   {
-    id: 2, date: 'Jun 15', time: '21:00', homeTeam: 'Argentina', awayTeam: 'Chile',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇱', homeScore: null, awayScore: null,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
+    id: 2, date: 'Jun 11', time: '22:00', homeTeam: 'South Korea', awayTeam: 'Czech Republic',
+    homeFlag: '🇰🇷', awayFlag: '🇨🇿', homeScore: null, awayScore: null,
+    venue: 'Estadio Akron, Guadalajara', stage: 'Group A',
   },
   {
-    id: 3, date: 'Jun 16', time: '15:00', homeTeam: 'Brazil', awayTeam: 'Germany',
-    homeFlag: '🇧🇷', awayFlag: '🇩🇪', homeScore: null, awayScore: null,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
+    id: 3, date: 'Jun 12', time: '15:00', homeTeam: 'Canada', awayTeam: 'Bosnia and Herzegovina',
+    homeFlag: '🇨🇦', awayFlag: '🇧🇦', homeScore: null, awayScore: null,
+    venue: 'BMO Field, Toronto', stage: 'Group B',
   },
   {
-    id: 4, date: 'Jun 17', time: '20:00', homeTeam: 'France', awayTeam: 'Spain',
-    homeFlag: '🇫🇷', awayFlag: '🇪🇸', homeScore: null, awayScore: null,
-    venue: 'Hard Rock Stadium, Miami', stage: 'Group D',
+    id: 4, date: 'Jun 12', time: '21:00', homeTeam: 'United States', awayTeam: 'Paraguay',
+    homeFlag: '🇺🇸', awayFlag: '🇵🇾', homeScore: null, awayScore: null,
+    venue: 'SoFi Stadium, Los Angeles', stage: 'Group D',
   },
   {
-    id: 5, date: 'Jun 18', time: '17:00', homeTeam: 'England', awayTeam: 'Japan',
-    homeFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
-    venue: 'Lumen Field, Seattle', stage: 'Group D',
+    id: 5, date: 'Jun 13', time: '15:00', homeTeam: 'Qatar', awayTeam: 'Switzerland',
+    homeFlag: '🇶🇦', awayFlag: '🇨🇭', homeScore: null, awayScore: null,
+    venue: "Levi's Stadium, San Francisco Bay Area", stage: 'Group B',
   },
   {
-    id: 6, date: 'Jun 19', time: '19:00', homeTeam: 'Colombia', awayTeam: 'Peru',
-    homeFlag: '🇨🇴', awayFlag: '🇵🇪', homeScore: null, awayScore: null,
-    venue: 'Estadio Azteca, Mexico City', stage: 'Group C',
+    id: 6, date: 'Jun 13', time: '18:00', homeTeam: 'Brazil', awayTeam: 'Morocco',
+    homeFlag: '🇧🇷', awayFlag: '🇲🇦', homeScore: null, awayScore: null,
+    venue: 'MetLife Stadium, New York/New Jersey', stage: 'Group C',
+  },
+  {
+    id: 7, date: 'Jun 13', time: '21:00', homeTeam: 'Haiti', awayTeam: 'Scotland',
+    homeFlag: '🇭🇹', awayFlag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', homeScore: null, awayScore: null,
+    venue: 'Gillette Stadium, Boston', stage: 'Group C',
+  },
+  {
+    id: 8, date: 'Jun 14', time: '00:00', homeTeam: 'Australia', awayTeam: 'Turkey',
+    homeFlag: '🇦🇺', awayFlag: '🇹🇷', homeScore: null, awayScore: null,
+    venue: 'BC Place, Vancouver', stage: 'Group D',
+  },
+  {
+    id: 9, date: 'Jun 14', time: '13:00', homeTeam: 'Germany', awayTeam: 'Curaçao',
+    homeFlag: '🇩🇪', awayFlag: '🇨🇼', homeScore: null, awayScore: null,
+    venue: 'NRG Stadium, Houston', stage: 'Group E',
+  },
+  {
+    id: 10, date: 'Jun 14', time: '16:00', homeTeam: 'Netherlands', awayTeam: 'Japan',
+    homeFlag: '🇳🇱', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
+    venue: 'AT&T Stadium, Dallas', stage: 'Group F',
+  },
+  {
+    id: 11, date: 'Jun 14', time: '19:00', homeTeam: 'Ivory Coast', awayTeam: 'Ecuador',
+    homeFlag: '🇨🇮', awayFlag: '🇪🇨', homeScore: null, awayScore: null,
+    venue: 'Lincoln Financial Field, Philadelphia', stage: 'Group E',
+  },
+  {
+    id: 12, date: 'Jun 14', time: '22:00', homeTeam: 'Sweden', awayTeam: 'Tunisia',
+    homeFlag: '🇸🇪', awayFlag: '🇹🇳', homeScore: null, awayScore: null,
+    venue: 'Estadio BBVA, Monterrey', stage: 'Group F',
   },
 ];
 
-export const recentResults: Match[] = [
-  {
-    id: 101, date: 'Jun 10', time: '20:00', homeTeam: 'United States', awayTeam: 'Bolivia',
-    homeFlag: '🇺🇸', awayFlag: '🇧🇴', homeScore: 3, awayScore: 0,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
-  },
-  {
-    id: 102, date: 'Jun 11', time: '18:00', homeTeam: 'Argentina', awayTeam: 'Canada',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇦', homeScore: 2, awayScore: 0,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
-  },
-  {
-    id: 103, date: 'Jun 12', time: '21:00', homeTeam: 'Brazil', awayTeam: 'Colombia',
-    homeFlag: '🇧🇷', awayFlag: '🇨🇴', homeScore: 1, awayScore: 1,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
-  },
-];
+// The tournament kicks off on June 11, 2026, so there are no completed matches yet.
+export const recentResults: Match[] = [];
 
+// Pre-tournament facts (the competition has not started, so there are no live match stats yet).
 export const tournamentStats: Stat[] = [
-  { label: 'Total Goals', value: '24', icon: '⚽' },
-  { label: 'Matches Played', value: '8', icon: '🏟️' },
-  { label: 'Yellow Cards', value: '19', icon: '🟨' },
-  { label: 'Top Scorer', value: 'L. Messi (3)', icon: '👟' },
-  { label: 'Attendance', value: '640,000+', icon: '👥' },
-  { label: 'Host Countries', value: '3', icon: '🌎' },
+  { label: 'Teams', value: '48', icon: '⚽' },
+  { label: 'Groups', value: '12', icon: '🏆' },
+  { label: 'Matches', value: '104', icon: '🏟️' },
+  { label: 'Host Cities', value: '16', icon: '🏙️' },
+  { label: 'Host Nations', value: '3', icon: '🌎' },
+  { label: 'Kickoff', value: 'Jun 11', icon: '📅' },
 ];
 
 export const featuredTeams = [
   { name: 'Argentina', flag: '🇦🇷', ranking: 1, coach: 'Lionel Scaloni', confederation: 'CONMEBOL' },
-  { name: 'France', flag: '🇫🇷', ranking: 2, coach: 'Didier Deschamps', confederation: 'UEFA' },
-  { name: 'Brazil', flag: '🇧🇷', ranking: 3, coach: 'Dorival Júnior', confederation: 'CONMEBOL' },
-  { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', ranking: 4, coach: 'Gareth Southgate', confederation: 'UEFA' },
-  { name: 'Spain', flag: '🇪🇸', ranking: 5, coach: 'Luis de la Fuente', confederation: 'UEFA' },
-  { name: 'United States', flag: '🇺🇸', ranking: 11, coach: 'Mauricio Pochettino', confederation: 'CONCACAF' },
-  { name: 'Germany', flag: '🇩🇪', ranking: 12, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
-  { name: 'Mexico', flag: '🇲🇽', ranking: 16, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
+  { name: 'Spain', flag: '🇪🇸', ranking: 2, coach: 'Luis de la Fuente', confederation: 'UEFA' },
+  { name: 'France', flag: '🇫🇷', ranking: 3, coach: 'Didier Deschamps', confederation: 'UEFA' },
+  { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', ranking: 4, coach: 'Thomas Tuchel', confederation: 'UEFA' },
+  { name: 'Brazil', flag: '🇧🇷', ranking: 5, coach: 'Carlo Ancelotti', confederation: 'CONMEBOL' },
+  { name: 'Portugal', flag: '🇵🇹', ranking: 6, coach: 'Roberto Martínez', confederation: 'UEFA' },
+  { name: 'Netherlands', flag: '🇳🇱', ranking: 7, coach: 'Ronald Koeman', confederation: 'UEFA' },
+  { name: 'Belgium', flag: '🇧🇪', ranking: 8, coach: 'Rudi Garcia', confederation: 'UEFA' },
+  { name: 'Germany', flag: '🇩🇪', ranking: 9, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
+  { name: 'United States', flag: '🇺🇸', ranking: 15, coach: 'Mauricio Pochettino', confederation: 'CONCACAF' },
+  { name: 'Mexico', flag: '🇲🇽', ranking: 17, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
+  { name: 'Canada', flag: '🇨🇦', ranking: 26, coach: 'Jesse Marsch', confederation: 'CONCACAF' },
 ];
