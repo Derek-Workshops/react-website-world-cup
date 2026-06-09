@@ -1,5 +1,5 @@
 import React from 'react';
-import { tournamentStats } from '../data/mockData';
+import { seriesStats } from '../data/mockData';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -13,8 +13,8 @@ const CountdownUnit: React.FC<{ value: number; label: string }> = ({ value, labe
 );
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  // Placeholder countdown to Jun 14 2026 opening match
-  const countdown = { days: 5, hours: 14, minutes: 32, seconds: 17 };
+  // Placeholder countdown to Game 4 tip-off
+  const countdown = { days: 3, hours: 11, minutes: 24, seconds: 52 };
 
   return (
     <div>
@@ -45,33 +45,31 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="inline-block bg-[#f5a623]/10 border border-[#f5a623]/30 rounded-full px-4 py-1.5 text-[#f5a623] text-xs font-bold uppercase tracking-[0.3em] mb-6">
-            June 11 – July 19, 2026
+            June 4 – 22, 2026 · Best of 7
           </div>
 
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-black text-white leading-none mb-4 tracking-tight">
-            FIFA WORLD
+            NBA
             <span className="block text-transparent bg-clip-text"
               style={{ backgroundImage: 'linear-gradient(90deg, #f5a623, #ffd700, #f5a623)' }}>
-              CUP 2026
+              FINALS 2026
             </span>
           </h1>
 
           <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-4">
-            The biggest FIFA World Cup in history. 48 teams. 3 host nations.
-            104 matches across North America.
+            The chase for the Larry O'Brien Trophy. Two conference champions.
+            Seven games. One title.
           </p>
 
           <div className="flex items-center justify-center gap-3 mb-10 text-sm text-white/50">
-            <span className="flex items-center gap-1.5">🇺🇸 United States</span>
-            <span className="text-[#f5a623]">•</span>
-            <span className="flex items-center gap-1.5">🇨🇦 Canada</span>
-            <span className="text-[#f5a623]">•</span>
-            <span className="flex items-center gap-1.5">🇲🇽 Mexico</span>
+            <span className="flex items-center gap-1.5">🍀 Boston Celtics</span>
+            <span className="text-[#f5a623]">vs</span>
+            <span className="flex items-center gap-1.5">⚡ Oklahoma City Thunder</span>
           </div>
 
           {/* Countdown */}
           <div className="mb-10">
-            <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Opening Match Countdown</p>
+            <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Game 4 Tip-Off Countdown</p>
             <div className="flex justify-center gap-3">
               <CountdownUnit value={countdown.days} label="Days" />
               <CountdownUnit value={countdown.hours} label="Hours" />
@@ -91,7 +89,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               onClick={() => onNavigate('groups')}
               className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full transition-colors duration-200 border border-white/20"
             >
-              Explore Groups
+              View Standings
             </button>
           </div>
         </div>
@@ -107,7 +105,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="bg-[#f5a623] py-4">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {tournamentStats.map((stat) => (
+            {seriesStats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-2xl mb-0.5">{stat.icon}</div>
                 <div className="text-[#0a0a1a] font-black text-xl">{stat.value}</div>
@@ -122,14 +120,14 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-black text-white">Upcoming Matches</h2>
-            <p className="text-white/40 text-sm mt-1">Next fixtures in the group stage</p>
+            <h2 className="text-3xl font-black text-white">Upcoming Games</h2>
+            <p className="text-white/40 text-sm mt-1">Next games in the Finals series</p>
           </div>
         </div>
         <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
           <span className="text-5xl">🗓️</span>
           <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-          <p className="text-white/40 text-sm">Upcoming match fixtures will appear here.</p>
+          <p className="text-white/40 text-sm">Upcoming game fixtures will appear here.</p>
         </div>
       </section>
 
@@ -138,9 +136,9 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-black text-white mb-8">Recent Results</h2>
           <div className="border-2 border-dashed border-white/10 rounded-2xl py-16 flex flex-col items-center justify-center gap-4">
-            <span className="text-5xl">⚽</span>
+            <span className="text-5xl">🏀</span>
             <h3 className="text-white font-bold text-xl">Coming Soon</h3>
-            <p className="text-white/40 text-sm">Match results will be displayed here once the tournament begins.</p>
+            <p className="text-white/40 text-sm">Game results will be displayed here as the series unfolds.</p>
           </div>
         </div>
       </section>
@@ -158,12 +156,12 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             }}
           />
           <div className="relative z-10">
-            <span className="text-6xl mb-4 block">⚽</span>
+            <span className="text-6xl mb-4 block">🏀</span>
             <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-              Don't Miss a Single Match
+              Don't Miss a Single Game
             </h2>
             <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
-              Explore team profiles, live standings, and the full match schedule for the 2026 FIFA World Cup.
+              Explore team profiles, live standings, and the full game schedule for the 2026 NBA Finals.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button
