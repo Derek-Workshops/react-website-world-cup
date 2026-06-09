@@ -7,8 +7,9 @@ import GroupsPage from './pages/GroupsPage';
 import SchedulePage from './pages/SchedulePage';
 import TeamsPage from './pages/TeamsPage';
 import StatsPage from './pages/StatsPage';
+import MapPage from './pages/MapPage';
 
-type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats';
+type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats' | 'map';
 
 function App() {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -30,6 +31,8 @@ function App() {
         return <TeamsPage />;
       case 'stats':
         return <StatsPage />;
+      case 'map':
+        return <MapPage />;
       default:
         return <HomePage onNavigate={navigate} />;
     }
