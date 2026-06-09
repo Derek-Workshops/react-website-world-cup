@@ -127,3 +127,69 @@ export const featuredTeams = [
   { name: 'Germany', flag: '🇩🇪', ranking: 12, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
   { name: 'Mexico', flag: '🇲🇽', ranking: 16, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
 ];
+
+export interface RoadStep {
+  stage: string;
+  date: string;
+  time: string;
+  opponent: string;
+  opponentFlag: string;
+  opponentNote: string;
+  stadium: string;
+  city: string;
+  country: string;
+  flag: string;
+}
+
+// Brazil's projected knockout path, assuming they win Group C and keep winning.
+// Opponents are projections based on the mock group standings and depend on other results.
+export const brazilRoadToFinal: RoadStep[] = [
+  {
+    stage: 'Round of 16',
+    date: 'Jul 1, 2026',
+    time: '15:00',
+    opponent: 'England',
+    opponentFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    opponentNote: 'Projected runner-up, Group D',
+    stadium: 'Lumen Field',
+    city: 'Seattle',
+    country: 'USA',
+    flag: '🇺🇸',
+  },
+  {
+    stage: 'Quarter-final',
+    date: 'Jul 10, 2026',
+    time: '18:00',
+    opponent: 'United States',
+    opponentFlag: '🇺🇸',
+    opponentNote: 'Projected winner, Group A',
+    stadium: 'SoFi Stadium',
+    city: 'Los Angeles',
+    country: 'USA',
+    flag: '🇺🇸',
+  },
+  {
+    stage: 'Semi-final',
+    date: 'Jul 14, 2026',
+    time: '20:00',
+    opponent: 'Argentina',
+    opponentFlag: '🇦🇷',
+    opponentNote: 'Projected winner, Group B',
+    stadium: 'Mercedes-Benz Stadium',
+    city: 'Atlanta',
+    country: 'USA',
+    flag: '🇺🇸',
+  },
+  {
+    stage: 'Final',
+    date: 'Jul 19, 2026',
+    time: '15:00',
+    opponent: 'France',
+    opponentFlag: '🇫🇷',
+    opponentNote: 'Projected winner, Group D',
+    stadium: 'MetLife Stadium',
+    city: 'New York / New Jersey',
+    country: 'USA',
+    flag: '🇺🇸',
+  },
+];
