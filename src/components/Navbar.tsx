@@ -11,6 +11,7 @@ const navLinks = [
   { id: 'schedule', label: 'Schedule' },
   { id: 'teams', label: 'Teams' },
   { id: 'stats', label: 'Stats' },
+  { id: 'pool', label: 'Prediction Pool' },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ activePage, onNavigate }) => {
@@ -55,8 +56,11 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, onNavigate }) => {
 
           {/* CTA */}
           <div className="hidden md:block">
-            <button className="bg-[#c8102e] hover:bg-[#a50d26] text-white px-5 py-2 rounded-full text-sm font-bold transition-colors duration-200 shadow-lg">
-              Get Tickets
+            <button
+              onClick={() => onNavigate('pool')}
+              className="bg-[#c8102e] hover:bg-[#a50d26] text-white px-5 py-2 rounded-full text-sm font-bold transition-colors duration-200 shadow-lg"
+            >
+              Join Pool
             </button>
           </div>
 
@@ -90,8 +94,11 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, onNavigate }) => {
                 {link.label}
               </button>
             ))}
-            <button className="w-full mt-2 bg-[#c8102e] text-white px-4 py-2.5 rounded-md text-sm font-bold">
-              Get Tickets
+            <button
+              onClick={() => { onNavigate('pool'); setMenuOpen(false); }}
+              className="w-full mt-2 bg-[#c8102e] text-white px-4 py-2.5 rounded-md text-sm font-bold"
+            >
+              Join Pool
             </button>
           </div>
         </div>
