@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { upcomingMatches, recentResults, Match } from '../data/mockData';
-
-const stages = ['All', 'Group A', 'Group B', 'Group C', 'Group D'];
+import { Match } from '../data/mockData';
+import { useWorldCupMatches } from '../hooks/useWorldCupMatches';
 
 const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isResult = false }) => (
   <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
@@ -53,12 +52,18 @@ const MatchCard: React.FC<{ match: Match; isResult?: boolean }> = ({ match, isRe
 const SchedulePage: React.FC = () => {
   const [activeStage, setActiveStage] = useState('All');
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
+  const { upcoming, results, source } = useWorldCupMatches();
+
+  const stages = [
+    'All',
+    ...Array.from(new Set([...upcoming, ...results].map((m) => m.stage))),
+  ];
 
   const filterMatches = (matches: Match[]) =>
     activeStage === 'All' ? matches : matches.filter((m) => m.stage === activeStage);
 
-  const upcomingFiltered = filterMatches(upcomingMatches);
-  const resultsFiltered = filterMatches(recentResults);
+  const upcomingFiltered = filterMatches(upcoming);
+  const resultsFiltered = filterMatches(results);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -69,6 +74,12 @@ const SchedulePage: React.FC = () => {
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Fixtures & Results</h1>
         <p className="text-white/40">All 104 matches of the 2026 FIFA World Cup</p>
+        {source === 'live' && (
+          <span className="inline-flex items-center gap-1.5 mt-4 bg-green-500/15 text-green-400 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            Live data
+          </span>
+        )}
       </div>
 
       {/* Tabs */}
@@ -128,10 +139,14 @@ const SchedulePage: React.FC = () => {
         )
       )}
 
-      {/* Placeholder note */}
+      {/* Data source note */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data.</strong> Full 104-match schedule will be populated here.
+          {source === 'live' ? (
+            <>📡 <strong className="text-white/80">Live fixtures</strong> from TheSportsDB. Full 104-match coverage requires a premium API key.</>
+          ) : (
+            <>⚠️ <strong className="text-white/80">Showing cached data.</strong> Live fixtures are temporarily unavailable.</>
+          )}
         </p>
       </div>
     </div>
