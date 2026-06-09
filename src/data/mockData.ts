@@ -22,6 +22,9 @@ export interface Match {
   awayScore: number | null;
   venue: string;
   stage: string;
+  // Optional crest image URLs (used when data comes from the live API)
+  homeBadge?: string;
+  awayBadge?: string;
 }
 
 export interface Stat {
