@@ -3,12 +3,11 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import GroupsPage from './pages/GroupsPage';
-import SchedulePage from './pages/SchedulePage';
-import TeamsPage from './pages/TeamsPage';
-import StatsPage from './pages/StatsPage';
+import EpisodesPage from './pages/EpisodesPage';
+import HostsPage from './pages/HostsPage';
+import AboutPage from './pages/AboutPage';
 
-type Page = 'home' | 'groups' | 'schedule' | 'teams' | 'stats';
+type Page = 'home' | 'episodes' | 'hosts' | 'about';
 
 function App() {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -22,21 +21,19 @@ function App() {
     switch (activePage) {
       case 'home':
         return <HomePage onNavigate={navigate} />;
-      case 'groups':
-        return <GroupsPage />;
-      case 'schedule':
-        return <SchedulePage />;
-      case 'teams':
-        return <TeamsPage />;
-      case 'stats':
-        return <StatsPage />;
+      case 'episodes':
+        return <EpisodesPage />;
+      case 'hosts':
+        return <HostsPage />;
+      case 'about':
+        return <AboutPage />;
       default:
         return <HomePage onNavigate={navigate} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a]">
+    <div className="min-h-screen bg-court-dark">
       <Navbar activePage={activePage} onNavigate={navigate} />
       <main className={activePage !== 'home' ? 'pt-16' : ''}>
         {renderPage()}

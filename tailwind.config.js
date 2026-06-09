@@ -6,10 +6,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'wc-red': '#c8102e',
-        'wc-blue': '#003087',
-        'wc-gold': '#f5a623',
-        'wc-dark': '#0a0a1a',
+        'court-dark': '#0b140d',
+        'court-green': '#16331f',
+        'court-clay': '#d4673b',
       },
     },
   },

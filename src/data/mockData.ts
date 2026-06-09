@@ -1,27 +1,27 @@
-export interface Team {
+export interface Episode {
   id: number;
-  name: string;
-  flag: string;
-  group: string;
-  played: number;
-  won: number;
-  drawn: number;
-  lost: number;
-  points: number;
+  number: number;
+  title: string;
+  description: string;
+  date: string;
+  duration: string;
+  guest: string;
+  guestEmoji: string;
+  tags: string[];
+  audioUrl: string;
 }
 
-export interface Match {
-  id: number;
-  date: string;
-  time: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeFlag: string;
-  awayFlag: string;
-  homeScore: number | null;
-  awayScore: number | null;
-  venue: string;
-  stage: string;
+export interface Host {
+  name: string;
+  role: string;
+  emoji: string;
+  bio: string;
+  funFact: string;
+}
+
+export interface Platform {
+  name: string;
+  icon: string;
 }
 
 export interface Stat {
@@ -30,100 +30,130 @@ export interface Stat {
   icon: string;
 }
 
-export const groups: Record<string, Team[]> = {
-  A: [
-    { id: 1, name: 'United States', flag: '🇺🇸', group: 'A', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 2, name: 'Mexico', flag: '🇲🇽', group: 'A', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 3, name: 'Panama', flag: '🇵🇦', group: 'A', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 4, name: 'Bolivia', flag: '🇧🇴', group: 'A', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  B: [
-    { id: 5, name: 'Argentina', flag: '🇦🇷', group: 'B', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 6, name: 'Chile', flag: '🇨🇱', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 7, name: 'Peru', flag: '🇵🇪', group: 'B', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 8, name: 'Canada', flag: '🇨🇦', group: 'B', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  C: [
-    { id: 9, name: 'Brazil', flag: '🇧🇷', group: 'C', played: 2, won: 2, drawn: 0, lost: 0, points: 6 },
-    { id: 10, name: 'Colombia', flag: '🇨🇴', group: 'C', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 11, name: 'Germany', flag: '🇩🇪', group: 'C', played: 2, won: 0, drawn: 1, lost: 1, points: 1 },
-    { id: 12, name: 'Japan', flag: '🇯🇵', group: 'C', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-  D: [
-    { id: 13, name: 'France', flag: '🇫🇷', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 14, name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'D', played: 2, won: 1, drawn: 1, lost: 0, points: 4 },
-    { id: 15, name: 'Spain', flag: '🇪🇸', group: 'D', played: 2, won: 1, drawn: 0, lost: 1, points: 3 },
-    { id: 16, name: 'South Korea', flag: '🇰🇷', group: 'D', played: 2, won: 0, drawn: 0, lost: 2, points: 0 },
-  ],
-};
+// Royalty-free sample audio so the player actually works in the demo.
+const SAMPLE_AUDIO = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
-export const upcomingMatches: Match[] = [
+export const showName = 'Break Point';
+export const showTagline = 'A weekly tennis podcast';
+
+export const episodes: Episode[] = [
   {
-    id: 1, date: 'Jun 14', time: '18:00', homeTeam: 'United States', awayTeam: 'Mexico',
-    homeFlag: '🇺🇸', awayFlag: '🇲🇽', homeScore: null, awayScore: null,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
+    id: 1,
+    number: 42,
+    title: 'The Art of the Second Serve',
+    description:
+      'We break down why the second serve wins (and loses) the biggest matches, and how the pros build pressure point by point.',
+    date: 'Jun 6, 2026',
+    duration: '52 min',
+    guest: 'Coach Maria Alvarez',
+    guestEmoji: '🎾',
+    tags: ['Technique', 'Strategy'],
+    audioUrl: SAMPLE_AUDIO,
   },
   {
-    id: 2, date: 'Jun 15', time: '21:00', homeTeam: 'Argentina', awayTeam: 'Chile',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇱', homeScore: null, awayScore: null,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
+    id: 2,
+    number: 41,
+    title: 'Clay vs. Grass: A Surface Showdown',
+    description:
+      'Sliding on clay or charging the net on grass? We argue about which surface makes the most exciting tennis.',
+    date: 'May 30, 2026',
+    duration: '47 min',
+    guest: 'Former Pro Daniel Okafor',
+    guestEmoji: '🟧',
+    tags: ['Debate', 'History'],
+    audioUrl: SAMPLE_AUDIO,
   },
   {
-    id: 3, date: 'Jun 16', time: '15:00', homeTeam: 'Brazil', awayTeam: 'Germany',
-    homeFlag: '🇧🇷', awayFlag: '🇩🇪', homeScore: null, awayScore: null,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
+    id: 3,
+    number: 40,
+    title: 'Inside the Mind of a Returner',
+    description:
+      'A sports psychologist joins us to talk nerves, routines, and the mental game of facing a 130 mph serve.',
+    date: 'May 23, 2026',
+    duration: '58 min',
+    guest: 'Dr. Lena Park',
+    guestEmoji: '🧠',
+    tags: ['Mindset', 'Interview'],
+    audioUrl: SAMPLE_AUDIO,
   },
   {
-    id: 4, date: 'Jun 17', time: '20:00', homeTeam: 'France', awayTeam: 'Spain',
-    homeFlag: '🇫🇷', awayFlag: '🇪🇸', homeScore: null, awayScore: null,
-    venue: 'Hard Rock Stadium, Miami', stage: 'Group D',
+    id: 4,
+    number: 39,
+    title: 'Grand Slam Preview Spectacular',
+    description:
+      'Our bold predictions, dark horses, and the storylines we cannot wait to follow at the next major.',
+    date: 'May 16, 2026',
+    duration: '63 min',
+    guest: 'The whole crew',
+    guestEmoji: '🏆',
+    tags: ['Preview', 'Predictions'],
+    audioUrl: SAMPLE_AUDIO,
   },
   {
-    id: 5, date: 'Jun 18', time: '17:00', homeTeam: 'England', awayTeam: 'Japan',
-    homeFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', awayFlag: '🇯🇵', homeScore: null, awayScore: null,
-    venue: 'Lumen Field, Seattle', stage: 'Group D',
+    id: 5,
+    number: 38,
+    title: 'The One-Handed Backhand Lives On',
+    description:
+      'It is rare, it is beautiful, and it is endangered. We celebrate the most elegant shot in the game.',
+    date: 'May 9, 2026',
+    duration: '44 min',
+    guest: 'Analyst Sofia Rinaldi',
+    guestEmoji: '🎯',
+    tags: ['Technique', 'History'],
+    audioUrl: SAMPLE_AUDIO,
   },
   {
-    id: 6, date: 'Jun 19', time: '19:00', homeTeam: 'Colombia', awayTeam: 'Peru',
-    homeFlag: '🇨🇴', awayFlag: '🇵🇪', homeScore: null, awayScore: null,
-    venue: 'Estadio Azteca, Mexico City', stage: 'Group C',
+    id: 6,
+    number: 37,
+    title: 'From the Junior Circuit to the Tour',
+    description:
+      'A rising star shares the grind of travel, qualifying rounds, and chasing a dream one tournament at a time.',
+    date: 'May 2, 2026',
+    duration: '50 min',
+    guest: 'Rising Star Theo Nguyen',
+    guestEmoji: '🌟',
+    tags: ['Interview', 'Career'],
+    audioUrl: SAMPLE_AUDIO,
   },
 ];
 
-export const recentResults: Match[] = [
+export const hosts: Host[] = [
   {
-    id: 101, date: 'Jun 10', time: '20:00', homeTeam: 'United States', awayTeam: 'Bolivia',
-    homeFlag: '🇺🇸', awayFlag: '🇧🇴', homeScore: 3, awayScore: 0,
-    venue: 'MetLife Stadium, New York', stage: 'Group A',
+    name: 'Jordan Reyes',
+    role: 'Host & Founder',
+    emoji: '🎙️',
+    bio: 'Lifelong tennis obsessive and former college player who started Break Point from a spare bedroom.',
+    funFact: 'Once hit with a top-100 pro at a charity event (and lost 6-0).',
   },
   {
-    id: 102, date: 'Jun 11', time: '18:00', homeTeam: 'Argentina', awayTeam: 'Canada',
-    homeFlag: '🇦🇷', awayFlag: '🇨🇦', homeScore: 2, awayScore: 0,
-    venue: 'AT&T Stadium, Dallas', stage: 'Group B',
+    name: 'Priya Sharma',
+    role: 'Co-Host & Analyst',
+    emoji: '📊',
+    bio: 'Turns match stats into stories. If there is a pattern in the data, Priya has already found it.',
+    funFact: 'Tracks every Grand Slam final on a giant spreadsheet.',
   },
   {
-    id: 103, date: 'Jun 12', time: '21:00', homeTeam: 'Brazil', awayTeam: 'Colombia',
-    homeFlag: '🇧🇷', awayFlag: '🇨🇴', homeScore: 1, awayScore: 1,
-    venue: 'SoFi Stadium, Los Angeles', stage: 'Group C',
+    name: 'Marcus Bell',
+    role: 'Co-Host & Producer',
+    emoji: '🎧',
+    bio: 'The voice that keeps the show on the rails and the laughs coming between the serious analysis.',
+    funFact: 'Owns 14 racquets and refuses to explain why.',
   },
 ];
 
-export const tournamentStats: Stat[] = [
-  { label: 'Total Goals', value: '24', icon: '⚽' },
-  { label: 'Matches Played', value: '8', icon: '🏟️' },
-  { label: 'Yellow Cards', value: '19', icon: '🟨' },
-  { label: 'Top Scorer', value: 'L. Messi (3)', icon: '👟' },
-  { label: 'Attendance', value: '640,000+', icon: '👥' },
-  { label: 'Host Countries', value: '3', icon: '🌎' },
+export const platforms: Platform[] = [
+  { name: 'Apple Podcasts', icon: '🎧' },
+  { name: 'Spotify', icon: '🟢' },
+  { name: 'YouTube', icon: '▶️' },
+  { name: 'Overcast', icon: '📻' },
+  { name: 'RSS Feed', icon: '📡' },
 ];
 
-export const featuredTeams = [
-  { name: 'Argentina', flag: '🇦🇷', ranking: 1, coach: 'Lionel Scaloni', confederation: 'CONMEBOL' },
-  { name: 'France', flag: '🇫🇷', ranking: 2, coach: 'Didier Deschamps', confederation: 'UEFA' },
-  { name: 'Brazil', flag: '🇧🇷', ranking: 3, coach: 'Dorival Júnior', confederation: 'CONMEBOL' },
-  { name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', ranking: 4, coach: 'Gareth Southgate', confederation: 'UEFA' },
-  { name: 'Spain', flag: '🇪🇸', ranking: 5, coach: 'Luis de la Fuente', confederation: 'UEFA' },
-  { name: 'United States', flag: '🇺🇸', ranking: 11, coach: 'Mauricio Pochettino', confederation: 'CONCACAF' },
-  { name: 'Germany', flag: '🇩🇪', ranking: 12, coach: 'Julian Nagelsmann', confederation: 'UEFA' },
-  { name: 'Mexico', flag: '🇲🇽', ranking: 16, coach: 'Javier Aguirre', confederation: 'CONCACAF' },
+export const showStats: Stat[] = [
+  { label: 'Episodes', value: '42', icon: '🎙️' },
+  { label: 'Monthly Listens', value: '85K+', icon: '🎧' },
+  { label: 'Avg. Length', value: '52 min', icon: '⏱️' },
+  { label: 'Seasons', value: '3', icon: '📚' },
+  { label: 'Guests', value: '60+', icon: '⭐' },
+  { label: 'New Episodes', value: 'Weekly', icon: '🗓️' },
 ];
