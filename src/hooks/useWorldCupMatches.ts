@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Match, upcomingMatches, recentResults } from '../data/mockData';
-import { fetchWorldCupMatches } from '../services/sportsDb';
+import { fetchWorldCupMatches } from '../services/espn';
 
 export type DataSource = 'loading' | 'live' | 'fallback';
 

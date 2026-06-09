@@ -143,7 +143,7 @@ const SchedulePage: React.FC = () => {
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
           {source === 'live' ? (
-            <>📡 <strong className="text-white/80">Live fixtures</strong> from TheSportsDB. Full 104-match coverage requires a premium API key.</>
+            <>📡 <strong className="text-white/80">Live fixtures</strong> from ESPN's public football API.</>
           ) : (
             <>⚠️ <strong className="text-white/80">Showing cached data.</strong> Live fixtures are temporarily unavailable.</>
           )}

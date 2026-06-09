@@ -1,6 +1,7 @@
 // Maps country names (as returned by the data source) to emoji flags.
 // Falls back to a soccer ball when a country isn't in the map.
 const COUNTRY_FLAGS: Record<string, string> = {
+  Algeria: '🇩🇿',
   Argentina: '🇦🇷',
   Australia: '🇦🇺',
   Austria: '🇦🇹',
@@ -14,6 +15,8 @@ const COUNTRY_FLAGS: Record<string, string> = {
   'Cape Verde': '🇨🇻',
   Chile: '🇨🇱',
   Colombia: '🇨🇴',
+  'Congo DR': '🇨🇩',
+  'DR Congo': '🇨🇩',
   'Costa Rica': '🇨🇷',
   Croatia: '🇭🇷',
   'Curaçao': '🇨🇼',
@@ -29,7 +32,9 @@ const COUNTRY_FLAGS: Record<string, string> = {
   Ghana: '🇬🇭',
   Haiti: '🇭🇹',
   Iran: '🇮🇷',
+  Iraq: '🇮🇶',
   'Ivory Coast': '🇨🇮',
+  Jordan: '🇯🇴',
   Japan: '🇯🇵',
   'South Korea': '🇰🇷',
   'Korea Republic': '🇰🇷',
@@ -60,6 +65,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
   'United States': '🇺🇸',
   USA: '🇺🇸',
   Uruguay: '🇺🇾',
+  Uzbekistan: '🇺🇿',
   Wales: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
 };
 
