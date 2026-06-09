@@ -2,14 +2,20 @@ import React, { useMemo, useState } from 'react';
 import MatchCard from '../components/MatchCard';
 import { LoadingState, ErrorState, EmptyState } from '../components/MatchListState';
 import { useFixtures } from '../hooks/useFixtures';
-import { getUpcoming, getResults } from '../services/worldCupApi';
+import { getUpcoming, getResults, getGroupNames } from '../services/worldCupApi';
 
 const SchedulePage: React.FC = () => {
   const { fixtures, loading, error } = useFixtures();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'results'>('upcoming');
+  const [activeGroup, setActiveGroup] = useState('All');
 
-  const upcoming = useMemo(() => getUpcoming(fixtures), [fixtures]);
-  const results = useMemo(() => getResults(fixtures), [fixtures]);
+  const groupNames = useMemo(() => getGroupNames(fixtures), [fixtures]);
+  const scoped = useMemo(
+    () => (activeGroup === 'All' ? fixtures : fixtures.filter((f) => f.group === activeGroup)),
+    [fixtures, activeGroup],
+  );
+  const upcoming = useMemo(() => getUpcoming(scoped), [scoped]);
+  const results = useMemo(() => getResults(scoped), [scoped]);
   const list = activeTab === 'upcoming' ? upcoming : results;
 
   const renderBody = () => {
@@ -62,6 +68,25 @@ const SchedulePage: React.FC = () => {
           </button>
         ))}
       </div>
+
+      {/* Group filter */}
+      {groupNames.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {['All', ...groupNames].map((g) => (
+            <button
+              key={g}
+              onClick={() => setActiveGroup(g)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                activeGroup === g
+                  ? 'bg-[#003087] text-white'
+                  : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
+              }`}
+            >
+              {g === 'All' ? 'All Groups' : `Group ${g}`}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Match cards */}
       {renderBody()}

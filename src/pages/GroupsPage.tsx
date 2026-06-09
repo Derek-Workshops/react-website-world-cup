@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
-import { groups, Team } from '../data/mockData';
+import React, { useMemo, useState } from 'react';
+import { useFixtures } from '../hooks/useFixtures';
+import { buildStandings, Standing } from '../services/worldCupApi';
+import { LoadingState, ErrorState, EmptyState } from '../components/MatchListState';
 
-const GroupTable: React.FC<{ groupName: string; teams: Team[] }> = ({ groupName, teams }) => (
+const TeamBadge: React.FC<{ name: string; badge: string | null }> = ({ name, badge }) =>
+  badge ? (
+    <img src={badge} alt={name} className="w-6 h-6 object-contain" loading="lazy" />
+  ) : (
+    <span className="text-xl">⚽</span>
+  );
+
+const GroupTable: React.FC<{ groupName: string; teams: Standing[] }> = ({ groupName, teams }) => (
   <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
     <div className="bg-[#003087] px-5 py-3 flex items-center justify-between">
       <h3 className="font-black text-white text-lg tracking-wider">GROUP {groupName}</h3>
@@ -15,54 +24,72 @@ const GroupTable: React.FC<{ groupName: string; teams: Team[] }> = ({ groupName,
           <th className="text-center px-3 py-3 font-medium">W</th>
           <th className="text-center px-3 py-3 font-medium">D</th>
           <th className="text-center px-3 py-3 font-medium">L</th>
+          <th className="text-center px-3 py-3 font-medium">GD</th>
           <th className="text-center px-3 py-3 font-medium">Pts</th>
         </tr>
       </thead>
       <tbody>
-        {teams
-          .sort((a, b) => b.points - a.points)
-          .map((team, index) => (
-            <tr
-              key={team.id}
-              className={`border-b border-white/5 last:border-0 transition-colors hover:bg-white/5 ${
-                index < 2 ? 'border-l-2 border-l-[#f5a623]' : ''
-              }`}
-            >
-              <td className="px-5 py-3.5">
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ${
-                      index < 2 ? 'bg-[#f5a623] text-[#0a0a1a]' : 'bg-white/10 text-white/40'
-                    }`}
-                  >
-                    {index + 1}
-                  </span>
-                  <span className="text-xl">{team.flag}</span>
-                  <span className="text-white font-medium">{team.name}</span>
-                </div>
-              </td>
-              <td className="text-center px-3 py-3.5 text-white/70">{team.played}</td>
-              <td className="text-center px-3 py-3.5 text-white/70">{team.won}</td>
-              <td className="text-center px-3 py-3.5 text-white/70">{team.drawn}</td>
-              <td className="text-center px-3 py-3.5 text-white/70">{team.lost}</td>
-              <td className="text-center px-3 py-3.5 font-black text-[#f5a623]">{team.points}</td>
-            </tr>
-          ))}
+        {teams.map((team, index) => (
+          <tr
+            key={team.team}
+            className={`border-b border-white/5 last:border-0 transition-colors hover:bg-white/5 ${
+              index < 2 ? 'border-l-2 border-l-[#f5a623]' : ''
+            }`}
+          >
+            <td className="px-5 py-3.5">
+              <div className="flex items-center gap-3">
+                <span
+                  className={`text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ${
+                    index < 2 ? 'bg-[#f5a623] text-[#0a0a1a]' : 'bg-white/10 text-white/40'
+                  }`}
+                >
+                  {index + 1}
+                </span>
+                <TeamBadge name={team.team} badge={team.badge} />
+                <span className="text-white font-medium">{team.team}</span>
+              </div>
+            </td>
+            <td className="text-center px-3 py-3.5 text-white/70">{team.played}</td>
+            <td className="text-center px-3 py-3.5 text-white/70">{team.won}</td>
+            <td className="text-center px-3 py-3.5 text-white/70">{team.drawn}</td>
+            <td className="text-center px-3 py-3.5 text-white/70">{team.lost}</td>
+            <td className="text-center px-3 py-3.5 text-white/70">
+              {team.goalDiff > 0 ? `+${team.goalDiff}` : team.goalDiff}
+            </td>
+            <td className="text-center px-3 py-3.5 font-black text-[#f5a623]">{team.points}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
     <div className="px-5 py-2 bg-[#f5a623]/5 flex items-center gap-2">
       <div className="w-3 h-0.5 bg-[#f5a623]" />
-      <span className="text-xs text-white/40">Advances to Round of 32</span>
+      <span className="text-xs text-white/40">Top 2 advance to Round of 32</span>
     </div>
   </div>
 );
 
 const GroupsPage: React.FC = () => {
+  const { fixtures, loading, error } = useFixtures();
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-  const displayGroups = selectedGroup
-    ? { [selectedGroup]: groups[selectedGroup] }
-    : groups;
+  const standings = useMemo(() => buildStandings(fixtures), [fixtures]);
+  const groupNames = Object.keys(standings);
+
+  const displayGroups = selectedGroup ? [selectedGroup] : groupNames;
+
+  const renderBody = () => {
+    if (loading) return <LoadingState />;
+    if (error) return <ErrorState message={error} />;
+    if (groupNames.length === 0)
+      return <EmptyState icon="🗂️" title="Groups not available" message="The group draw will appear here." />;
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {displayGroups.map((name) => (
+          <GroupTable key={name} groupName={name} teams={standings[name]} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -78,44 +105,42 @@ const GroupsPage: React.FC = () => {
       </div>
 
       {/* Group filter */}
-      <div className="flex flex-wrap justify-center gap-2 mb-10">
-        <button
-          onClick={() => setSelectedGroup(null)}
-          className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
-            selectedGroup === null
-              ? 'bg-[#f5a623] text-[#0a0a1a]'
-              : 'bg-white/10 text-white/70 hover:bg-white/20'
-          }`}
-        >
-          All Groups
-        </button>
-        {Object.keys(groups).map((g) => (
+      {groupNames.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
           <button
-            key={g}
-            onClick={() => setSelectedGroup(g === selectedGroup ? null : g)}
+            onClick={() => setSelectedGroup(null)}
             className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
-              selectedGroup === g
+              selectedGroup === null
                 ? 'bg-[#f5a623] text-[#0a0a1a]'
                 : 'bg-white/10 text-white/70 hover:bg-white/20'
             }`}
           >
-            Group {g}
+            All Groups
           </button>
-        ))}
-      </div>
+          {groupNames.map((g) => (
+            <button
+              key={g}
+              onClick={() => setSelectedGroup(g === selectedGroup ? null : g)}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                selectedGroup === g
+                  ? 'bg-[#f5a623] text-[#0a0a1a]'
+                  : 'bg-white/10 text-white/70 hover:bg-white/20'
+              }`}
+            >
+              Group {g}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Group tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {Object.entries(displayGroups).map(([name, teams]) => (
-          <GroupTable key={name} groupName={name} teams={teams} />
-        ))}
-      </div>
+      {renderBody()}
 
       {/* Info banner */}
       <div className="mt-12 bg-[#003087]/20 border border-[#003087]/40 rounded-2xl p-6 text-center">
         <p className="text-white/60 text-sm">
-          ⚠️ <strong className="text-white/80">Placeholder data only.</strong> These standings are for demonstration purposes.
-          All match results and team data are fictional.
+          📡 <strong className="text-white/80">Live data.</strong> Standings update automatically as group-stage
+          results come in. Before kickoff every team shows 0 played.
         </p>
       </div>
     </div>

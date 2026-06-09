@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
             © 2026 FIFA World Cup Demo Template. Built to showcase Devin AI.
           </p>
           <p className="text-white/30 text-xs">
-            All data is placeholder content.
+            Live match data via TheSportsDB.
           </p>
         </div>
       </div>

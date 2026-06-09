@@ -17,7 +17,9 @@ const MatchCard: React.FC<{ match: Fixture }> = ({ match }) => {
   return (
     <div className="bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-5 transition-all duration-200">
       <div className="flex justify-between items-center mb-4">
-        <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">World Cup 2026</span>
+        <span className="text-xs text-[#f5a623] font-bold uppercase tracking-widest">
+          {match.group ? `Group ${match.group}` : 'World Cup 2026'}
+        </span>
         <div className="text-right">
           <div className="text-xs text-white/60 font-medium">{match.date}</div>
           <div className="text-xs text-white/30">{match.time} local</div>
